@@ -4,14 +4,14 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTheme } from '@/contexts/ThemeContext';
-import axios from "axios"
+import { generateGoogleCalendarUrl } from '@/lib/googleCalendarUrl';
 import { toast } from 'react-toastify';
 
 export default function MedicationParser({ onSave }) {
   const [text, setText] = useState('');
   const [parsedTasks, setParsedTasks] = useState([]);
+  const [calendarLinks, setCalendarLinks] = useState([]);
   const [isParsing, setIsParsing] = useState(false);
-  const [isAddingToCalendar, setIsAddingToCalendar] = useState(false);
   const router = useRouter();
   const { isDark } = useTheme();
 
@@ -136,34 +136,10 @@ Multivitamin once daily`
     toast.success('Tasks saved successfully!');
   }
 
-  function addToGoogleCalendar() {
-    if (parsedTasks.length === 0) return;
-
-    // Create calendar events for each medication
-    const events = parsedTasks.map(task => {
-      const event = {
-        title: `Medication: ${task.title}`,
-        description: `Medication Reminder\n\nFrequency: ${task.frequency.replace(/-/g, ' ')}\nType: ${task.type}\nTimes: ${task.times.join(', ')}`,
-        location: 'Health Management',
-        startTime: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // Tomorrow
-        endTime: new Date(Date.now() + 25 * 60 * 60 * 1000).toISOString() // 1 hour later
-      };
-
-      // Create Google Calendar URL for this event
-      const startTime = new Date(event.startTime).toISOString().replace(/-|:|\.\d+/g, '');
-      const endTime = new Date(event.endTime).toISOString().replace(/-|:|\.\d+/g, '');
-
-      return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&details=${encodeURIComponent(event.description)}&location=${encodeURIComponent(event.location)}&dates=${startTime}/${endTime}`;
-    });
-
-    // Open the first event in Google Calendar
-    // Note: For multiple events, you might want to create them one by one or use batch creation
-    window.open(events[0], '_blank');
-  }
-
   function loadExample(exampleText) {
     setText(exampleText);
     setParsedTasks([]);
+    setCalendarLinks([]);
   }
 
   const getFrequencyColor = (frequency) => {
@@ -187,34 +163,40 @@ Multivitamin once daily`
     return icons[type] || '💊';
   };
 
-  const addToCalendar = async () => {
+  const addToCalendar = () => {
     if (parsedTasks.length === 0) return;
 
-    setIsAddingToCalendar(true);
+    const now = new Date();
 
     try {
-      const events = parsedTasks.map(task => {
-        return {
-          title: task.title,
-          frequency: task.frequency,
-          times: task.times
-        }
-      })
+      const links = parsedTasks.flatMap(task => {
+        const times = Array.isArray(task.times) && task.times.length > 0 ? task.times : ['08:00'];
 
-      const eventsTextObj = {
-        content: JSON.stringify(events)
-      }
+        return times.map((time) => {
+          const [hourText, minuteText] = String(time).split(':');
+          const hours = Number(hourText);
+          const minutes = Number(minuteText);
+          const start = new Date(now);
+          start.setDate(start.getDate() + 1);
+          start.setHours(Number.isNaN(hours) ? 8 : hours, Number.isNaN(minutes) ? 0 : minutes, 0, 0);
 
-      const parsedEvents = await axios.post('/api/parser', eventsTextObj)
-      console.log(`parsedEvents: `, parsedEvents.data)
-      await axios.post('/api/create', { events: parsedEvents.data })
+          const end = new Date(start.getTime() + 60 * 60 * 1000);
 
-      toast.success('Tasks added to Google Calendar successfully!');
+          return generateGoogleCalendarUrl({
+            title: `Medication: ${task.title}`,
+            description: `Medication Reminder\n\nFrequency: ${task.frequency.replace(/-/g, ' ')}\nType: ${task.type}\nTime: ${time}`,
+            start,
+            end,
+          });
+        });
+      });
+
+      setCalendarLinks(links);
+
+      toast.success('Google Calendar links generated successfully!');
     } catch (error) {
       console.error('Error adding to calendar:', error);
-      toast.error('Failed to add tasks to Google Calendar.');
-    } finally {
-      setIsAddingToCalendar(false);
+      toast.error('Failed to generate Google Calendar links.');
     }
   }
 
@@ -339,28 +321,34 @@ Ibuprofen 400mg - as needed for pain`}
                     </span>
                     <button
                       onClick={addToCalendar}
-                      disabled={isAddingToCalendar}
-                      className={`bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2 text-sm ${isAddingToCalendar
-                          ? 'opacity-70 cursor-not-allowed from-gray-400 to-gray-500'
-                          : 'hover:from-green-600 hover:to-emerald-700 transform hover:scale-105 shadow-lg hover:shadow-xl'
-                        }`}
+                      className="bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2 text-sm hover:from-green-600 hover:to-emerald-700 transform hover:scale-105 shadow-lg hover:shadow-xl"
                     >
-                      {isAddingToCalendar ? (
-                        <>
-                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                          <span>Adding to Calendar...</span>
-                        </>
-                      ) : (
-                        <>
-                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19a2 2 0 002 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z" />
-                          </svg>
-                          <span>Add to Calendar</span>
-                        </>
-                      )}
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19a2 2 0 002 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z" />
+                      </svg>
+                      <span>Add to Calendar</span>
                     </button>
                   </div>
                 </div>
+
+                {calendarLinks.length > 0 && (
+                  <div className="mt-4 p-4 rounded-lg border border-emerald-200 bg-emerald-50 dark:border-emerald-700 dark:bg-emerald-900/20">
+                    <p className="font-semibold text-gray-900 dark:text-white mb-3">Open and save your generated tasks:</p>
+                    <div className="space-y-2">
+                      {calendarLinks.map((link, index) => (
+                        <a
+                          key={`${link}-${index}`}
+                          href={link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block text-sm text-emerald-700 dark:text-emerald-300 hover:underline"
+                        >
+                          Open Google Calendar task #{index + 1}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 <div className="space-y-6">
                   {parsedTasks.map((task) => (

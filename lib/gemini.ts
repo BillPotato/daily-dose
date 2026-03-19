@@ -7,5 +7,10 @@ export function getGeminiModel() {
   }
 
   const client = new GoogleGenerativeAI(apiKey);
-  return client.getGenerativeModel({ model: "gemini-2.0-flash" });
+  return client.getGenerativeModel({
+    model: "gemini-2.5-flash",
+    generationConfig: {
+      responseMimeType: "application/json",
+    },
+  });
 }

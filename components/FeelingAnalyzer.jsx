@@ -4,13 +4,15 @@
 import { useState } from 'react';
 import { feelingAnalyzerAPI } from '@/services/api';
 import { useTheme } from '@/contexts/ThemeContext';
-import axios from "axios"
+import { generateGoogleCalendarUrl } from '@/lib/googleCalendarUrl';
 import { toast } from 'react-toastify';
 
 export default function FeelingAnalyzer({ onAnalysisComplete }) {
   const [feelingText, setFeelingText] = useState('');
   const [analysis, setAnalysis] = useState(null);
+  const [calendarLinks, setCalendarLinks] = useState([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [rateLimitReached, setRateLimitReached] = useState(false);
   const [error, setError] = useState('');
   const { isDark } = useTheme();
 
@@ -94,35 +96,57 @@ export default function FeelingAnalyzer({ onAnalysisComplete }) {
     }
   };
 
+  const stripCodeFence = (raw) => {
+    if (typeof raw !== 'string') return raw;
+    return raw
+      .replace(/```(?:json)?\s*/gi, '')
+      .replace(/```/g, '')
+      .trim();
+  };
+
   const addToCalendar = async (content) => {
-    console.log(`Passed to server: ${content}`)
-    const postObj = {
-        content
-    }
-
-    // axios.post("http://localhost:3001/api/parser", postObj)
-    //     .then(res => {
-    //         const events = res.data
-    //         console.log(events)
-    //         axios.post("http://localhost:3001/api/create", events)
-    //             .then(res2 => {
-    //                 console.log(res2.data)
-    //             })
-    //     })
-
-    const eventsText = await axios.post('/api/parser', postObj)
-    const events = eventsText.data
-    console.log(`EVENTS _____: ${events}`)
-    const eventsObj = {
-        events
-    }
+    console.log(`Passed to parser: ${content}`)
+    setIsAnalyzing(true);
+    setError('');
 
     try {
-        const status = await axios.post('/api/create', eventsObj)
-        toast.success("Routine added to Google Calendar")
-        console.log(status.data)
-    } catch {
-        toast.error("Request failed")
+        const eventsText = await feelingAnalyzerAPI.analyzeSymptoms(content);
+        console.log('Raw Gemini Output:', eventsText);
+
+        const cleaned = typeof eventsText === 'string' ? stripCodeFence(eventsText) : eventsText;
+        const parsed = typeof cleaned === 'string' ? JSON.parse(cleaned) : cleaned;
+        const tasks = Array.isArray(parsed?.tasks) ? parsed.tasks : [];
+
+        const generatedLinks = tasks.map((task, index) => {
+          const summary = String(task?.summary ?? `Health Task ${index + 1}`);
+          const description = String(task?.description ?? '');
+          const location = String(task?.location ?? '');
+
+          const start = task?.start?.dateTime ?? task?.start?.date ?? new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+          const end = task?.end?.dateTime ?? task?.end?.date ?? new Date(Date.now() + 25 * 60 * 60 * 1000).toISOString();
+
+          return generateGoogleCalendarUrl({
+            title: summary,
+            description,
+            location,
+            start,
+            end,
+          });
+        });
+
+        setCalendarLinks(generatedLinks);
+        toast.success("Google Calendar links generated")
+    } catch (err) {
+        if (err?.response?.status === 429) {
+          const quotaMessage = 'You have reached your limit of 15 queries. Please try again later.';
+          setRateLimitReached(true);
+          setError(quotaMessage);
+          toast.error(quotaMessage);
+        } else {
+          toast.error("Failed to generate calendar links")
+        }
+    } finally {
+      setIsAnalyzing(false);
     }
     
   }
@@ -169,7 +193,7 @@ export default function FeelingAnalyzer({ onAnalysisComplete }) {
         <div className="flex space-x-4">
           <button
             onClick={(e)=>handleClick(feelingText)}
-            disabled={isAnalyzing || !feelingText.trim()}
+            disabled={isAnalyzing || !feelingText.trim() || rateLimitReached}
             className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 disabled:from-gray-300 disabled:to-gray-400 text-white font-semibold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
           >
             {isAnalyzing ? (
@@ -178,10 +202,29 @@ export default function FeelingAnalyzer({ onAnalysisComplete }) {
                 <span>Analyzing with AI...</span>
               </div>
             ) : (
-              'Analyze My Feelings'
+              'Generate Calendar Tasks'
             )}
           </button>
         </div>
+
+        {calendarLinks.length > 0 && (
+          <div className="mt-6 p-4 rounded-xl border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20">
+            <p className="font-semibold text-gray-900 dark:text-white mb-3">Open and save your generated tasks:</p>
+            <div className="space-y-2">
+              {calendarLinks.map((link, index) => (
+                <a
+                  key={`${link}-${index}`}
+                  href={link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-sm text-blue-700 dark:text-blue-300 hover:underline"
+                >
+                  Open Google Calendar task #{index + 1}
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Quick Suggestions */}
