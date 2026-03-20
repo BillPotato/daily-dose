@@ -33,13 +33,6 @@ const defaultQuestions = [
     placeholder: 'Minutes of activity'
   },
   {
-    id: 'exercise',
-    text: 'How much did you move today?',
-    description: 'Any physical activity counts, even a short walk',
-    type: 'number',
-    placeholder: 'Minutes of activity'
-  },
-  {
     id: 'sleep',
     text: 'How did you sleep last night?',
     description: 'Quality matters more than quantity',
@@ -49,6 +42,8 @@ const defaultQuestions = [
     labels: ['Poor', 'Fair', 'Good', 'Very good', 'Excellent']
   },
 ]
+
+const SURVEY_WINDOW_SIZE = 7
 
 export default function Survey({ onSubmit }) {
   const [answers, setAnswers] = useState(() => {
@@ -82,8 +77,10 @@ export default function Survey({ onSubmit }) {
       date: new Date().toISOString(),
       answers
     }
-    const existing = JSON.parse(localStorage.getItem('surveys') || '[]')
-    localStorage.setItem('surveys', JSON.stringify([payload, ...existing]))
+    const parsed = JSON.parse(localStorage.getItem('surveys') || '[]')
+    const existing = Array.isArray(parsed) ? parsed : []
+    const updatedSurveys = [payload, ...existing].slice(0, SURVEY_WINDOW_SIZE)
+    localStorage.setItem('surveys', JSON.stringify(updatedSurveys))
     onSubmit && onSubmit(payload)
 
     setAnswers(() => {

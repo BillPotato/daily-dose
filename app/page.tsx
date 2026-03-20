@@ -83,6 +83,7 @@ export default function HomePage() {
     </div>
   );
 }
-// TODO: Fix first feeling-analyzer generate fails
+
 // TODO: Fix survey duplicate questions
 // TODO: Add sample data to the initial chart
+// TODO: Add github source on navbar

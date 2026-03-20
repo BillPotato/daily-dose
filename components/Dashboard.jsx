@@ -30,6 +30,15 @@ ChartJS.register(
   Filler
 );
 
+const CHART_WINDOW_SIZE = 7;
+const MOCK_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const MOCK_SERIES = {
+  mood: [1, 5, 2, 5, 2, 4, 1],
+  pain: [2, 9, 1, 8, 3, 7, 2],
+  exercise: [20, 85, 15, 90, 30, 80, 25],
+  sleep: [2, 5, 1, 5, 2, 4, 1],
+};
+
 export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
   const [surveys, setSurveys] = useState([]);
   const [chartType, setChartType] = useState('mood');
@@ -67,20 +76,27 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
 
   const chartData = useMemo(() => {
     const sortedSurveys = [...surveys].sort((a, b) => new Date(a.date) - new Date(b.date));
+    let labels = [...MOCK_LABELS];
+    let data = [...(MOCK_SERIES[chartType] || MOCK_SERIES.mood)];
 
-    const labels = sortedSurveys.map(survey =>
-      new Date(survey.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-    );
+    sortedSurveys.forEach((survey) => {
+      const label = new Date(survey.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      const value = (() => {
+        switch (chartType) {
+          case 'mood': return Number(survey.answers.mood || 0);
+          case 'pain': return Number(survey.answers.pain || 0);
+          case 'exercise': return Number(survey.answers.exercise || 0);
+          case 'sleep': return Number(survey.answers.sleep || 0);
+          default: return 0;
+        }
+      })();
 
-    const data = sortedSurveys.map(survey => {
-      switch (chartType) {
-        case 'mood': return Number(survey.answers.mood || 0);
-        case 'pain': return Number(survey.answers.pain || 0);
-        case 'exercise': return Number(survey.answers.exercise || 0);
-        case 'sleep': return Number(survey.answers.sleep || 0);
-        default: return 0;
-      }
+      labels = [...labels.slice(1), label];
+      data = [...data.slice(1), value];
     });
+
+    labels = labels.slice(-CHART_WINDOW_SIZE);
+    data = data.slice(-CHART_WINDOW_SIZE);
 
     const chartConfig = {
       mood: {
@@ -319,22 +335,11 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
             </div>
 
             <div className="h-80">
-              {surveys.length > 0 ? (
-                <Line data={chartData} options={chartOptions} />
-              ) : (
-                <div className="h-full flex items-center justify-center text-gray-500 dark:text-gray-400">
-                  <div className="text-center">
-                    <div className="text-6xl mb-4">📈</div>
-                    <p className="text-lg mb-2">No survey data yet</p>
-                    <p className="text-sm">Complete your first survey to see trends</p>
-                    <button
-                      onClick={() => router.push('/survey')}
-                      className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl transition-colors"
-                    >
-                      Take First Survey
-                    </button>
-                  </div>
-                </div>
+              <Line data={chartData} options={chartOptions} />
+              {surveys.length === 0 && (
+                <p className="mt-3 text-center text-sm text-gray-500 dark:text-gray-400">
+                  Showing sample trend data. Complete a survey to replace it with your own.
+                </p>
               )}
             </div>
           </div>
