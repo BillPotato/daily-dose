@@ -35,51 +35,51 @@ const SignIn = () => {
     <div className="w-full">
       {/* Header for mobile */}
       <div className="lg:hidden text-center mb-8">
-        <div className="w-16 h-16 rounded-2xl overflow-hidden shadow-lg border border-gray-200 bg-gradient-to-br from-blue-500 to-purple-600 mx-auto mb-4 flex items-center justify-center p-2">
+        <div className="w-16 h-16 rounded-2xl overflow-hidden shadow-lg border border-stone-200 dark:border-white/20 bg-emerald-800 mx-auto mb-4 flex items-center justify-center p-2">
           <img
             src="/daily_dose3.png"
             alt="Daily Dose Logo"
             className="w-full h-full object-cover transform scale-150 translate-y-2"
           />
         </div>
-        <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <h1 className="text-2xl font-bold text-emerald-900 dark:text-[#F1F3F2]">
           DAILY DOSE
         </h1>
-        <p className="text-gray-600 text-sm">Fuel Your Best Day</p>
+        <p className="text-stone-600 dark:text-[#D9DDDC] text-sm">Fuel Your Best Day</p>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 border border-gray-100 dark:border-gray-700">
+      <div className="bg-white dark:bg-[#252A27] rounded-3xl shadow-2xl p-8 border border-stone-100 dark:border-white/15">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Welcome Back</h1>
-          <p className="text-gray-600 dark:text-gray-400">Sign in to your Daily Dose account</p>
+          <h1 className="text-3xl font-bold text-stone-900 dark:text-[#F1F3F2] mb-2">Welcome Back</h1>
+          <p className="text-stone-600 dark:text-[#D9DDDC]">Sign in to your Daily Dose account</p>
         </div>
 
         {error && (
-          <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded-xl mb-6 text-center animate-pulse">
+          <div className="bg-stone-100 dark:bg-stone-800 border border-stone-300 dark:border-white/15 text-stone-700 dark:text-[#D9DDDC] px-4 py-3 rounded-xl mb-6 text-center animate-pulse">
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+            <label className="block text-sm font-medium text-stone-700 dark:text-[#D9DDDC]">Email</label>
             <input
               type="email"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full px-4 py-4 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all duration-300 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 hover:border-gray-300 dark:hover:border-gray-500"
+              className="w-full px-4 py-4 border border-stone-200 dark:border-white/15 rounded-xl focus:ring-4 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none transition-all duration-300 bg-white dark:bg-[#2A312D] text-stone-900 dark:text-[#F1F3F2] placeholder-stone-500 dark:placeholder-stone-400 hover:border-stone-300 dark:hover:border-white/25"
               placeholder="Enter your email"
               required
             />
           </div>
 
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
+            <label className="block text-sm font-medium text-stone-700 dark:text-[#D9DDDC]">Password</label>
             <input
               type="password"
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              className="w-full px-4 py-4 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all duration-300 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 hover:border-gray-300 dark:hover:border-gray-500"
+              className="w-full px-4 py-4 border border-stone-200 dark:border-white/15 rounded-xl focus:ring-4 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none transition-all duration-300 bg-white dark:bg-[#2A312D] text-stone-900 dark:text-[#F1F3F2] placeholder-stone-500 dark:placeholder-stone-400 hover:border-stone-300 dark:hover:border-white/25"
               placeholder="Enter your password"
               required
             />
@@ -88,7 +88,7 @@ const SignIn = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+            className="w-full bg-emerald-800 hover:bg-emerald-700 disabled:bg-stone-400 dark:disabled:bg-stone-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
           >
             {loading ? (
               <div className="flex items-center justify-center space-x-3">
@@ -102,16 +102,16 @@ const SignIn = () => {
         </form>
 
         <div className="mt-8 text-center">
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-stone-600 dark:text-[#D9DDDC]">
             Don't have an account?{' '}
-            <Link href="/auth/signup" className="text-blue-600 hover:text-blue-700 font-semibold dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-200">
+            <Link href="/auth/signup" className="text-emerald-700 hover:text-emerald-800 font-semibold dark:text-emerald-300 dark:hover:text-emerald-200 transition-colors duration-200">
               Sign Up
             </Link>
           </p>
         </div>
 
-        <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-xl text-center">
-          <p className="text-sm text-blue-800 dark:text-blue-300">
+        <div className="mt-6 p-4 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-xl text-center">
+          <p className="text-sm text-emerald-800 dark:text-emerald-200">
             <strong>Demo Credentials:</strong><br />
             test@test.com / password
           </p>

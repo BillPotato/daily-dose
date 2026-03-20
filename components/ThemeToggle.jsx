@@ -8,18 +8,18 @@ const ThemeToggle = () => {
   return (
     <button
       onClick={toggleTheme}
-      className="relative inline-flex h-6 w-11 items-center rounded-full bg-gray-200 dark:bg-gray-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+      className="relative inline-flex h-6 w-11 items-center rounded-full bg-stone-200 dark:bg-stone-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:ring-offset-2"
       aria-label="Toggle theme"
     >
       <span className="sr-only">Toggle theme</span>
       <span
         className={`${isDark ? 'translate-x-6' : 'translate-x-1'
-          } inline-block h-4 w-4 transform rounded-full bg-white dark:bg-gray-300 transition-transform duration-300 ease-in-out`}
+          } inline-block h-4 w-4 transform rounded-full bg-stone-50 dark:bg-emerald-900 transition-transform duration-300 ease-in-out`}
       />
       {/* Sun and Moon Icons */}
       <span className="absolute left-1 top-1/2 transform -translate-y-1/2">
         <svg
-          className={`h-3 w-3 transition-opacity duration-300 ${isDark ? 'opacity-0' : 'opacity-100'
+          className={`h-3 w-3 text-stone-600 transition-opacity duration-300 ${isDark ? 'opacity-0' : 'opacity-100'
             }`}
           fill="currentColor"
           viewBox="0 0 20 20"
@@ -33,7 +33,7 @@ const ThemeToggle = () => {
       </span>
       <span className="absolute right-1 top-1/2 transform -translate-y-1/2">
         <svg
-          className={`h-3 w-3 transition-opacity duration-300 ${isDark ? 'opacity-100' : 'opacity-0'
+          className={`h-3 w-3 text-emerald-200 transition-opacity duration-300 ${isDark ? 'opacity-100' : 'opacity-0'
             }`}
           fill="currentColor"
           viewBox="0 0 20 20"

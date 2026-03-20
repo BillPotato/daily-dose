@@ -155,27 +155,27 @@ export default function MedicationTracker({ tasks = [], onUpdateTask, onDeleteTa
   const pendingTasks = activeTasks.filter(task => !isCompletedToday(task));
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-10">
       {/* Header - FIXED: Ensure proper text colors */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+          <h2 className={`text-3xl font-semibold ${isDark ? 'text-stone-100' : 'text-emerald-950'}`}>
             Medication Tracker
           </h2>
-          <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+          <p className={`${isDark ? 'text-stone-300' : 'text-stone-600'}`}>
             Manage your daily medications and reminders
           </p>
         </div>
         <div className="flex space-x-3">
           <button
             onClick={requestNotificationPermission}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+            className="rounded-full bg-emerald-700 px-8 py-4 text-white transition-all duration-300 hover:-translate-y-1 hover:bg-emerald-800 hover:shadow-lg"
           >
             Enable Notifications
           </button>
           <button
             onClick={() => router.push('/medication-parser')}
-            className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
+            className="rounded-full bg-emerald-700 px-8 py-4 text-white transition-all duration-300 hover:-translate-y-1 hover:bg-emerald-800 hover:shadow-lg"
           >
             Add Medications
           </button>
@@ -183,7 +183,7 @@ export default function MedicationTracker({ tasks = [], onUpdateTask, onDeleteTa
       </div>
 
       {/* Current Time */}
-      <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6 rounded-2xl text-center">
+      <div className={`${isDark ? 'bg-stone-900 border border-stone-800 text-stone-100' : 'bg-white border border-stone-200 text-emerald-950'} p-8 rounded-[2rem] text-center shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)]`}>
         <div className="text-sm opacity-80">Current Time</div>
         <div className="text-3xl font-bold mt-2">
           {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -194,14 +194,13 @@ export default function MedicationTracker({ tasks = [], onUpdateTask, onDeleteTa
       </div>
 
       {/* Pending Medications - FIXED: Explicit text colors */}
-      <div className={`rounded-2xl shadow-lg border p-6 ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+      <div className={`rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border p-8 ${isDark ? 'bg-stone-900 border-stone-800' : 'bg-white border-stone-200'
         }`}>
         <div className="flex items-center justify-between mb-6">
-          <h3 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+          <h3 className={`text-xl font-semibold ${isDark ? 'text-stone-100' : 'text-emerald-950'}`}>
             Pending Medications
           </h3>
-          <span className={`text-sm px-3 py-1 rounded-full ${isDark ? 'bg-orange-900/30 text-orange-300' : 'bg-orange-100 text-orange-800'
-            }`}>
+          <span className="text-sm px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-200">
             {pendingTasks.length} pending
           </span>
         </div>
@@ -225,7 +224,7 @@ export default function MedicationTracker({ tasks = [], onUpdateTask, onDeleteTa
         ) : (
           <div className="text-center py-8">
             <div className="text-6xl mb-4">🎉</div>
-            <p className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+            <p className={`text-lg ${isDark ? 'text-stone-300' : 'text-stone-600'}`}>
               All medications completed for today!
             </p>
           </div>
@@ -233,14 +232,13 @@ export default function MedicationTracker({ tasks = [], onUpdateTask, onDeleteTa
       </div>
 
       {/* Completed Medications - FIXED: Explicit text colors */}
-      <div className={`rounded-2xl shadow-lg border p-6 ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+      <div className={`rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border p-8 ${isDark ? 'bg-stone-900 border-stone-800' : 'bg-white border-stone-200'
         }`}>
         <div className="flex items-center justify-between mb-6">
-          <h3 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+          <h3 className={`text-xl font-semibold ${isDark ? 'text-stone-100' : 'text-emerald-950'}`}>
             Completed Today
           </h3>
-          <span className={`text-sm px-3 py-1 rounded-full ${isDark ? 'bg-green-900/30 text-green-300' : 'bg-green-100 text-green-800'
-            }`}>
+          <span className="text-sm px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-200">
             {completedTasksToday.length} completed
           </span>
         </div>
@@ -248,15 +246,15 @@ export default function MedicationTracker({ tasks = [], onUpdateTask, onDeleteTa
         {completedTasksToday.length > 0 ? (
           <div className="space-y-3">
             {completedTasksToday.map(task => (
-              <div key={task.id} className={`flex items-center justify-between p-4 rounded-xl border ${isDark ? 'bg-green-900/20 border-green-800' : 'bg-green-50 border-green-200'
+              <div key={task.id} className={`flex items-center justify-between p-4 rounded-2xl border ${isDark ? 'bg-stone-800 border-stone-700' : 'bg-emerald-50 border-emerald-200'
                 }`}>
                 <div className="flex items-center space-x-4">
-                  <div className={`text-2xl ${isDark ? 'text-green-400' : 'text-green-600'}`}>✅</div>
+                  <div className={`text-2xl ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>✅</div>
                   <div>
-                    <h4 className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    <h4 className={`font-semibold ${isDark ? 'text-stone-100' : 'text-stone-900'}`}>
                       {task.title}
                     </h4>
-                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    <p className={`text-sm ${isDark ? 'text-stone-300' : 'text-stone-600'}`}>
                       Completed at {task.completed && task.completed.length > 0
                         ? new Date(task.completed[task.completed.length - 1].timestamp).toLocaleTimeString()
                         : 'Unknown time'
@@ -266,7 +264,7 @@ export default function MedicationTracker({ tasks = [], onUpdateTask, onDeleteTa
                 </div>
                 <button
                   onClick={() => markAsIncomplete(task.id)}
-                  className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                  className="rounded-full bg-stone-600 px-6 py-3 text-white transition-all duration-300 hover:-translate-y-1 hover:bg-stone-700 hover:shadow-lg"
                 >
                   Mark Incomplete
                 </button>
@@ -274,22 +272,22 @@ export default function MedicationTracker({ tasks = [], onUpdateTask, onDeleteTa
             ))}
           </div>
         ) : (
-          <p className={`text-center py-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+          <p className={`text-center py-4 ${isDark ? 'text-stone-300' : 'text-stone-500'}`}>
             No medications completed yet today
           </p>
         )}
       </div>
 
       {/* Medication Management - FIXED: Explicit text colors */}
-      <div className={`rounded-2xl shadow-lg border p-6 ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+      <div className={`rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border p-8 ${isDark ? 'bg-stone-900 border-stone-800' : 'bg-white border-stone-200'
         }`}>
         <div className="flex items-center justify-between mb-6">
-          <h3 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+          <h3 className={`text-xl font-semibold ${isDark ? 'text-stone-100' : 'text-emerald-950'}`}>
             Manage Medications
           </h3>
           <button
             onClick={() => setShowCompleted(!showCompleted)}
-            className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors"
+            className="rounded-full bg-stone-600 px-6 py-3 text-white transition-all duration-300 hover:-translate-y-1 hover:bg-stone-700 hover:shadow-lg"
           >
             {showCompleted ? 'Hide Completed' : 'Show All'}
           </button>
@@ -297,23 +295,22 @@ export default function MedicationTracker({ tasks = [], onUpdateTask, onDeleteTa
 
         <div className="space-y-3">
           {(showCompleted ? tasks : activeTasks).map(task => (
-            <div key={task.id} className={`flex items-center justify-between p-4 rounded-xl border ${isDark ? 'bg-gray-700/50 border-gray-600' : 'bg-gray-50 border-gray-200'
+            <div key={task.id} className={`flex items-center justify-between p-4 rounded-2xl border ${isDark ? 'bg-stone-800 border-stone-700' : 'bg-stone-50 border-stone-200'
               }`}>
               <div className="flex items-center space-x-4">
                 <div className="text-2xl">
                   {task.type === 'supplement' ? '🌿' : '💊'}
                 </div>
                 <div>
-                  <h4 className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  <h4 className={`font-semibold ${isDark ? 'text-stone-100' : 'text-stone-900'}`}>
                     {task.title}
                   </h4>
                   <div className="flex items-center space-x-2 mt-1">
-                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    <span className={`text-sm ${isDark ? 'text-stone-300' : 'text-stone-600'}`}>
                       {task.times?.join(', ') || 'No times set'}
                     </span>
                     {!task.isActive && (
-                      <span className={`px-2 py-1 text-xs rounded-full ${isDark ? 'bg-red-900/30 text-red-300' : 'bg-red-100 text-red-800'
-                        }`}>
+                      <span className="px-2 py-1 text-xs rounded-full bg-stone-200 text-stone-700 dark:bg-stone-700 dark:text-stone-200">
                         Inactive
                       </span>
                     )}
@@ -325,15 +322,15 @@ export default function MedicationTracker({ tasks = [], onUpdateTask, onDeleteTa
                 <button
                   onClick={() => safeUpdateTask({ ...task, isActive: !task.isActive })}
                   className={`px-4 py-2 rounded-lg transition-colors ${task.isActive
-                      ? 'bg-orange-500 hover:bg-orange-600 text-white'
-                      : 'bg-green-500 hover:bg-green-600 text-white'
+                      ? 'bg-stone-600 hover:bg-stone-700 text-white'
+                      : 'bg-emerald-700 hover:bg-emerald-800 text-white'
                     }`}
                 >
                   {task.isActive ? 'Deactivate' : 'Activate'}
                 </button>
                 <button
                   onClick={() => deleteTask(task.id)}
-                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+                  className="px-4 py-2 bg-stone-700 hover:bg-stone-800 text-white rounded-lg transition-colors"
                 >
                   Delete
                 </button>
@@ -345,12 +342,12 @@ export default function MedicationTracker({ tasks = [], onUpdateTask, onDeleteTa
         {tasks.length === 0 && (
           <div className="text-center py-8">
             <div className="text-6xl mb-4">💊</div>
-            <p className={`mb-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+            <p className={`mb-4 ${isDark ? 'text-stone-300' : 'text-stone-600'}`}>
               No medications added yet
             </p>
             <button
               onClick={() => router.push('/medication-parser')}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl transition-colors"
+              className="bg-emerald-700 hover:bg-emerald-800 text-white px-8 py-4 rounded-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
               Add Medications
             </button>

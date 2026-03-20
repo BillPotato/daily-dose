@@ -49,13 +49,13 @@ export default function HomePage() {
       <div
         className={`min-h-screen p-4 theme-transition ${
           isDark
-            ? "bg-slate-900"
-            : "bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30"
+            ? "bg-stone-950"
+            : "bg-transparent"
         }`}
       >
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-6 h-8 w-56 rounded-md bg-gray-200 dark:bg-slate-700" />
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mx-auto max-w-7xl px-2 py-6 sm:px-4 sm:py-10">
+          <div className="mb-6 h-8 w-56 rounded-md bg-stone-200 dark:bg-[#2A312D]" />
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 6 }).map((_, index) => (
               <TaskCardSkeleton key={`task-skeleton-${index}`} />
             ))}
@@ -69,11 +69,11 @@ export default function HomePage() {
     <div
       className={`min-h-screen p-4 theme-transition ${
         isDark
-          ? "bg-slate-900"
-          : "bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30"
+          ? "bg-stone-950"
+          : "bg-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="mx-auto max-w-7xl px-2 py-6 sm:px-4 sm:py-10">
         <Dashboard
           tasks={tasks}
           onUpdateTask={handleUpdateTask}

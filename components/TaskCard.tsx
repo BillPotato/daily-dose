@@ -49,12 +49,12 @@ export default function TaskCard({
 
   const getFrequencyColor = (frequency?: string) => {
     const colors: Record<string, string> = {
-      'once-daily': isDark ? 'bg-green-900/30 text-green-300' : 'bg-green-100 text-green-800',
-      'twice-daily': isDark ? 'bg-blue-900/30 text-blue-300' : 'bg-blue-100 text-blue-800',
-      'three-times-daily': isDark ? 'bg-purple-900/30 text-purple-300' : 'bg-purple-100 text-purple-800',
-      'daily': isDark ? 'bg-green-900/30 text-green-300' : 'bg-green-100 text-green-800',
+      'once-daily': isDark ? 'bg-emerald-900/35 text-emerald-200' : 'bg-emerald-100 text-emerald-800',
+      'twice-daily': isDark ? 'bg-emerald-800/40 text-emerald-100' : 'bg-emerald-50 text-emerald-900',
+      'three-times-daily': isDark ? 'bg-stone-700/70 text-stone-200' : 'bg-stone-200 text-stone-800',
+      'daily': isDark ? 'bg-emerald-900/35 text-emerald-200' : 'bg-emerald-100 text-emerald-800',
     };
-    return colors[frequency || ''] || (isDark ? 'bg-gray-600 text-gray-300' : 'bg-gray-100 text-gray-800');
+    return colors[frequency || ''] || (isDark ? 'bg-stone-700 text-stone-200' : 'bg-stone-100 text-stone-800');
   };
 
   const generateCalendarLinkForTask = () => {
@@ -116,155 +116,157 @@ export default function TaskCard({
   if (compact) {
     // Compact view for generated tasks
     return (
-      <div className={`p-4 rounded-xl border transition-all ${isDark ? 'bg-gray-700/50 border-gray-600 hover:border-blue-500' : 'bg-gray-50 border-gray-200 hover:border-blue-300'}`}>
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex-1">
+      <article className={`relative overflow-hidden rounded-[2rem] p-8 transition-all ${isDark ? 'bg-[#252A27] border border-white/15 shadow-[0_20px_60px_-15px_rgba(4,43,21,0.08)]' : 'bg-white border border-stone-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)]'}`}>
+        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+          <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <span className="text-2xl">{getTaskIcon()}</span>
-              <div className="flex-1">
-                <h4 className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {task.title}
-                </h4>
-                {task.description && (
-                  <p className={`text-sm mt-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    {task.description}
-                  </p>
-                )}
-              </div>
+              <span className="text-3xl">{getTaskIcon()}</span>
+              <h4 className={`text-2xl font-semibold ${isDark ? 'text-white' : 'text-emerald-950'}`}>
+                {task.title}
+              </h4>
             </div>
+            {task.description && (
+              <p className={`max-w-2xl text-base ${isDark ? 'text-[#D9DDDC]' : 'text-stone-600'}`}>
+                {task.description}
+              </p>
+            )}
             {task.frequency && (
-              <div className="mt-3">
-                <span className={`inline-block px-2 py-1 text-xs rounded-full ${getFrequencyColor(task.frequency)}`}>
-                  {task.frequency.replace(/-/g, ' ')}
-                </span>
-              </div>
+              <span className={`inline-flex rounded-full px-4 py-2 text-xs ${getFrequencyColor(task.frequency)}`}>
+                {task.frequency.replace(/-/g, ' ')}
+              </span>
             )}
           </div>
           <a
             href={generateCalendarLinkForTask()}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center gap-2 whitespace-nowrap"
+            className="inline-flex items-center gap-2 rounded-full bg-emerald-800 px-8 py-4 text-white transition-all duration-300 hover:-translate-y-1 hover:bg-emerald-700 hover:shadow-lg"
             title="Add to Google Calendar"
           >
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <span aria-hidden="true">🍃</span>
+            <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
               <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19a2 2 0 002 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z" />
             </svg>
-            <span>Add</span>
+            <span>Add to Calendar</span>
           </a>
         </div>
-      </div>
+      </article>
     );
   }
 
   // Full view for active tracking
   return (
-    <div
-      className={`p-4 rounded-xl border-2 transition-all ${
+    <article
+      className={`relative overflow-hidden rounded-[2rem] p-8 transition-all ${
         isTimeForMedication
           ? isDark
-            ? 'border-orange-500 bg-orange-900/20 animate-pulse'
-            : 'border-orange-400 bg-orange-50 animate-pulse'
+            ? 'border border-emerald-500/70 bg-[#2D332F] ring-2 ring-emerald-500/40 animate-pulse'
+            : 'bg-white border border-stone-200 ring-2 ring-emerald-300 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)]'
           : isDark
-            ? 'border-gray-600 bg-gray-700/50'
-            : 'border-gray-200 bg-gray-50'
+            ? 'border border-white/15 bg-[#252A27] shadow-[0_20px_60px_-15px_rgba(4,43,21,0.08)]'
+            : 'bg-white border border-stone-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)]'
       }`}
     >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <div className="text-2xl">{getTaskIcon()}</div>
-          <div>
-            <h4 className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              {task.title}
-            </h4>
+      <div className="relative flex flex-col gap-8">
+        <div className="flex flex-col justify-between gap-6 xl:flex-row xl:items-start">
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <span className="text-3xl">{getTaskIcon()}</span>
+              <h4 className={`text-3xl font-semibold ${isDark ? 'text-white' : 'text-emerald-950'}`}>
+                {task.title}
+              </h4>
+            </div>
+
             {task.description && (
-              <p className={`text-sm mt-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+              <p className={`max-w-3xl text-base leading-relaxed ${isDark ? 'text-[#D9DDDC]' : 'text-stone-600'}`}>
                 {task.description}
               </p>
             )}
-            <div className="flex items-center space-x-2 mt-1">
+
+            <div className="flex flex-wrap items-center gap-3">
               {nextReminderTime && (
-                <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                  Next: {nextReminderTime}
+                <span className={`rounded-full px-4 py-2 text-sm ${isDark ? 'bg-stone-700 text-stone-200' : 'bg-emerald-50 text-emerald-900'}`}>
+                  Next reminder: {nextReminderTime}
                 </span>
               )}
               {task.frequency && (
-                <span className={`px-2 py-1 text-xs rounded-full ${getFrequencyColor(task.frequency)}`}>
+                <span className={`rounded-full px-4 py-2 text-xs ${getFrequencyColor(task.frequency)}`}>
                   {task.frequency.replace(/-/g, ' ')}
+                </span>
+              )}
+              {isTimeForMedication && (
+                <span className={`rounded-full px-4 py-2 text-sm animate-pulse ${isDark ? 'bg-emerald-900/35 text-emerald-200' : 'bg-emerald-100 text-emerald-800'}`}>
+                  Time to take now
                 </span>
               )}
             </div>
           </div>
+
+          {showActionButtons && (
+            <div className="flex flex-wrap items-center gap-3 xl:justify-end">
+              {onRemindLater && (
+                <button
+                  onClick={() => onRemindLater(task.id)}
+                  className="rounded-full bg-stone-700 px-6 py-3 text-white transition-all duration-300 hover:-translate-y-1 hover:bg-stone-600 hover:shadow-lg"
+                >
+                  Remind Later
+                </button>
+              )}
+              <a
+                href={generateCalendarLinkForTask()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full bg-emerald-800 px-8 py-4 text-white transition-all duration-300 hover:-translate-y-1 hover:bg-emerald-700 hover:shadow-lg"
+                title="Add to Google Calendar"
+              >
+                <span aria-hidden="true">🍃</span>
+                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19a2 2 0 002 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z" />
+                </svg>
+                <span>Add to Calendar</span>
+              </a>
+              {onUpdate && (
+                <button
+                  onClick={handleMarkComplete}
+                  className="rounded-full bg-emerald-700 px-6 py-3 text-white transition-all duration-300 hover:-translate-y-1 hover:bg-emerald-800 hover:shadow-lg"
+                >
+                  Mark Complete
+                </button>
+              )}
+              {onDelete && (
+                <button
+                  onClick={handleDelete}
+                  className="rounded-full bg-stone-800 px-6 py-3 text-white transition-all duration-300 hover:-translate-y-1 hover:bg-stone-700 hover:shadow-lg"
+                >
+                  Delete
+                </button>
+              )}
+            </div>
+          )}
         </div>
 
-        {showActionButtons && (
-          <div className="flex items-center space-x-2">
-            {isTimeForMedication && (
-              <span className={`px-3 py-1 text-sm rounded-full animate-pulse ${isDark ? 'bg-orange-900/30 text-orange-300' : 'bg-orange-100 text-orange-800'}`}>
-                Time to take!
+        {task.times && task.times.length > 0 && (
+          <div className="flex flex-wrap items-center gap-2">
+            <span className={`text-sm font-medium ${isDark ? 'text-[#D9DDDC]' : 'text-stone-600'}`}>Times:</span>
+            {task.times.map((time, index) => (
+              <span
+                key={index}
+                className={`rounded-full px-3 py-1 text-xs ${
+                  time === nextReminderTime
+                    ? isDark
+                      ? 'bg-emerald-900/40 text-emerald-200 font-medium'
+                      : 'bg-emerald-100 text-emerald-800 font-medium'
+                    : isDark
+                      ? 'bg-stone-700 text-stone-200'
+                      : 'bg-stone-100 text-stone-700'
+                }`}
+              >
+                {time}
               </span>
-            )}
-            {onRemindLater && (
-              <button
-                onClick={() => onRemindLater(task.id)}
-                className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors"
-              >
-                Remind Later
-              </button>
-            )}
-            <a
-              href={generateCalendarLinkForTask()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center space-x-2"
-              title="Add to Google Calendar"
-            >
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19a2 2 0 002 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z" />
-              </svg>
-              <span>Calendar</span>
-            </a>
-            {onUpdate && (
-              <button
-                onClick={handleMarkComplete}
-                className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
-              >
-                Mark Complete
-              </button>
-            )}
-            {onDelete && (
-              <button
-                onClick={handleDelete}
-                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
-              >
-                Delete
-              </button>
-            )}
+            ))}
           </div>
         )}
       </div>
-
-      {task.times && task.times.length > 0 && (
-        <div className="flex items-center space-x-2 mt-3">
-          <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Times:</span>
-          {task.times.map((time, index) => (
-            <span
-              key={index}
-              className={`px-2 py-1 text-xs rounded ${
-                time === nextReminderTime
-                  ? isDark
-                    ? 'bg-blue-900/30 text-blue-300 font-medium'
-                    : 'bg-blue-100 text-blue-800 font-medium'
-                  : isDark
-                    ? 'bg-gray-600 text-gray-300'
-                    : 'bg-gray-100 text-gray-600'
-              }`}
-            >
-              {time}
-            </span>
-          ))}
-        </div>
-      )}
-    </div>
+    </article>
   );
 }

@@ -16,18 +16,18 @@ export default function Footer() {
     <footer
       className={`mt-auto border-t py-8 text-sm ${
         isDark
-          ? "border-gray-700 text-gray-400"
-          : "border-gray-200 text-gray-500"
+          ? "border-stone-800 bg-stone-900 text-stone-300"
+          : "border-stone-200 bg-[#F9F8F4] text-stone-600"
       }`}
     >
       <div className="mx-auto flex max-w-7xl flex-col items-center gap-4 px-4 text-center sm:px-6 lg:px-8">
         <p className="font-medium">Built by Bill Nguyen.</p>
 
         <div className="flex flex-wrap items-center justify-center gap-5">
-          <Link href="https://github.com/BillPotato" className="hover:text-blue-500 transition-colors">
+          <Link href="https://github.com/BillPotato" className="hover:text-emerald-800 transition-colors">
             Github
           </Link>
-          <Link href="https://www.linkedin.com/in/phuc-bao-nguyen/" className="hover:text-blue-500 transition-colors">
+          <Link href="https://www.linkedin.com/in/phuc-bao-nguyen/" className="hover:text-emerald-800 transition-colors">
             LinkedIn
           </Link>
         </div>

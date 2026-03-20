@@ -103,8 +103,8 @@ export default function Survey({ onSubmit }) {
       case 'scale':
         const range = question.max - question.min + 1
         return (
-          <div className="space-y-6">
-            <div className={`grid gap-3 ${range <= 5 ? 'grid-cols-5' : 'grid-cols-11'}`}>
+          <div className="space-y-8">
+            <div className={`grid gap-4 ${range <= 5 ? 'grid-cols-5' : 'grid-cols-11'}`}>
               {Array.from({ length: range }, (_, i) => {
                 const value = i + question.min
                 const isSelected = answers[question.id] === value.toString()
@@ -113,9 +113,9 @@ export default function Survey({ onSubmit }) {
                     key={value}
                     type="button"
                     onClick={() => handleChange(question.id, value.toString())}
-                    className={`group relative py-5 px-2 rounded-2xl font-medium transition-all duration-300 ${isSelected
-                      ? 'bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-200 scale-105'
-                      : `bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-indigo-300 dark:hover:border-indigo-500 hover:shadow-md`
+                    className={`group relative rounded-[2rem] px-2 py-6 font-medium transition-all duration-300 ${isSelected
+                      ? 'bg-emerald-800 text-white shadow-lg scale-105'
+                      : `bg-white border border-stone-200 text-stone-600 dark:bg-[#252A27] dark:border-white/15 dark:text-[#D9DDDC] hover:-translate-y-1 hover:shadow-lg`
                       }`}
                   >
                     <span className="text-xl block">{value}</span>
@@ -131,7 +131,7 @@ export default function Survey({ onSubmit }) {
               })}
             </div>
             {question.labels && (
-              <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 px-2">
+              <div className="flex justify-between px-2 text-xs text-stone-500 dark:text-[#D9DDDC]">
                 <span>{question.labels[0]}</span>
                 <span>{question.labels[question.labels.length - 1]}</span>
               </div>
@@ -148,7 +148,7 @@ export default function Survey({ onSubmit }) {
                 value={answers[question.id]}
                 onChange={(e) => handleChange(question.id, e.target.value)}
                 placeholder={question.placeholder}
-                className="w-full px-6 py-4 border-2 border-gray-200 dark:border-gray-600 rounded-2xl focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-900 focus:border-indigo-400 dark:focus:border-indigo-500 outline-none transition-all text-2xl text-center font-medium bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="w-full rounded-[2rem] bg-white px-8 py-6 text-center text-2xl font-medium text-stone-700 border border-stone-200 outline-none transition-all focus:ring-4 focus:ring-emerald-500/30 dark:bg-[#252A27] dark:border-white/15 dark:text-[#F1F3F2]"
               />
               {answers[question.id] && (
                 <div className="absolute right-4 top-1/2 -translate-y-1/2 text-green-500">
@@ -167,113 +167,101 @@ export default function Survey({ onSubmit }) {
   }
 
   return (
-    <div className={`min-h-screen py-8 px-4 ${isDark ? 'bg-slate-900' : 'bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50'}`}>
-      <div className="max-w-3xl mx-auto">
-        <div className={`${isDark ? 'bg-gray-800/80 border-gray-700' : 'bg-white/80 backdrop-blur-sm'} rounded-3xl shadow-2xl overflow-hidden border ${isDark ? 'border-gray-700' : 'border-white/20'}`}>
-          {/* Header */}
-          <div className="relative bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-8 text-white overflow-hidden">
-            <div className="absolute inset-0 opacity-10">
-              <div className="absolute top-0 left-0 w-64 h-64 bg-white rounded-full -translate-x-32 -translate-y-32"></div>
-              <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full translate-x-32 translate-y-32"></div>
-            </div>
+    <section className={`min-h-screen px-4 py-10 ${isDark ? 'bg-stone-950' : 'bg-transparent'}`}>
+      <div className="mx-auto max-w-5xl">
+        <div className={`${isDark ? 'bg-[#252A27] border border-white/15 shadow-[0_20px_60px_-15px_rgba(4,43,21,0.08)]' : 'bg-white border border-stone-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)]'} overflow-hidden rounded-[2rem]`}>
+          <div className="relative overflow-hidden bg-emerald-800 p-10 text-white">
 
-            {/* Back Button with Border */}
             <button
               onClick={() => router.push('/')}
-              className="relative flex items-center space-x-2 px-4 py-2 rounded-lg border-2 border-white/30 hover:border-white/50 text-white/90 hover:text-white mb-6 transition-all duration-300 group backdrop-blur-sm bg-white/10 hover:bg-white/20"
+              className="relative mb-8 inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/10 px-6 py-3 text-white transition-all duration-300 hover:-translate-y-1 hover:bg-white/20"
             >
-              <svg className="w-5 h-5 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              <span className="font-medium">Back to Dashboard</span>
+              <span>Back to Dashboard</span>
             </button>
 
-            <div className="relative">
-              <h1 className="text-3xl font-bold mb-2">Your Daily Check-In</h1>
-              <p className="text-white/90 text-lg">We're here to support your wellness journey</p>
-            </div>
+            <h1 className="relative text-5xl font-semibold text-white dark:text-[#F1F3F2]">Daily Wellness Check-In</h1>
+            <p className="relative mt-3 text-lg text-white/90">A calm moment to understand how your body and mood are doing today.</p>
           </div>
 
-          {/* Progress Bar */}
-          <div className="px-8 pt-8 pb-4">
-            <div className="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400 mb-3">
-              <span className="font-medium">Step {currentStep + 1} of {defaultQuestions.length}</span>
-              <span className="text-indigo-600 dark:text-indigo-400 font-semibold">{Math.round(progress)}% complete</span>
-            </div>
-            <div className="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
-              <div
-                className="bg-gradient-to-r from-indigo-500 to-purple-500 h-3 rounded-full transition-all duration-700 ease-out relative"
-                style={{ width: `${progress}%` }}
-              >
-                <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
+          <div className="p-10">
+            <div className="mb-10 space-y-4">
+              <div className="flex items-center justify-between text-sm">
+                <span className={`${isDark ? 'text-[#D9DDDC]' : 'text-stone-600'}`}>Step {currentStep + 1} of {defaultQuestions.length}</span>
+                <span className="font-semibold text-emerald-900 dark:text-emerald-300">{Math.round(progress)}% complete</span>
+              </div>
+              <div className="h-3 w-full overflow-hidden rounded-full bg-stone-100 dark:bg-stone-700">
+                <div
+                  className="h-full rounded-full bg-emerald-700 transition-all duration-700 ease-out"
+                  style={{ width: `${progress}%` }}
+                />
               </div>
             </div>
-          </div>
 
-          {/* Question */}
-          <div className="p-8 pt-6">
-            <div className="text-center mb-10 space-y-3">
-              <div className="inline-block px-4 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-full text-sm font-medium mb-2">
-                Question {currentStep + 1}
+            <div className="space-y-12">
+              <div className="space-y-4 text-center">
+                <span className="inline-flex rounded-full bg-emerald-50 px-4 py-1 text-sm font-medium text-emerald-900 dark:bg-emerald-900/30 dark:text-emerald-200">
+                  Question {currentStep + 1}
+                </span>
+                <h2 className={`text-4xl font-semibold leading-tight ${isDark ? 'text-white' : 'text-emerald-950'}`}>
+                  {currentQuestion.text}
+                </h2>
+                <p className={`${isDark ? 'text-[#D9DDDC]' : 'text-stone-600'} text-lg`}>
+                  {currentQuestion.description}
+                </p>
               </div>
-              <h2 className="text-3xl font-bold text-gray-800 dark:text-white leading-tight">
-                {currentQuestion.text}
-              </h2>
-              <p className="text-gray-500 dark:text-gray-400 text-lg">{currentQuestion.description}</p>
-            </div>
 
-            <div className="mb-10">
-              {renderInput(currentQuestion)}
-            </div>
+              <div>{renderInput(currentQuestion)}</div>
 
-            {/* Navigation */}
-            <div className="flex justify-between items-center pt-8 border-t border-gray-100 dark:border-gray-700">
-              <button
-                onClick={prevStep}
-                disabled={currentStep === 0}
-                className={`flex items-center space-x-2 px-6 py-3 rounded-xl font-medium transition-all ${currentStep === 0
-                  ? 'bg-gray-100 dark:bg-gray-700 text-gray-400 cursor-not-allowed'
-                  : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 hover:shadow-md'
-                  }`}
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-                <span>Previous</span>
-              </button>
-
-              {currentStep === defaultQuestions.length - 1 ? (
+              <div className="flex flex-wrap items-center justify-between gap-4 border-t border-stone-200 pt-8 dark:border-white/10">
                 <button
-                  onClick={submit}
-                  disabled={!answers[currentQuestion.id]}
-                  className="flex items-center space-x-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-3 rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl disabled:from-gray-300 disabled:to-gray-300 disabled:cursor-not-allowed disabled:shadow-none transform hover:scale-105 disabled:transform-none"
+                  onClick={prevStep}
+                  disabled={currentStep === 0}
+                  className={`inline-flex items-center gap-2 rounded-full px-7 py-4 transition-all duration-300 ${currentStep === 0
+                    ? 'cursor-not-allowed bg-stone-100 text-stone-400 dark:bg-stone-700 dark:text-stone-400'
+                    : 'bg-stone-100 text-stone-700 hover:-translate-y-1 hover:bg-stone-200 hover:shadow-lg dark:bg-[#2A312D] dark:text-[#D9DDDC] dark:hover:bg-[#333C37]'
+                    }`}
                 >
-                  <span>Complete Check-In</span>
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                   </svg>
+                  <span>Previous</span>
                 </button>
-              ) : (
-                <button
-                  onClick={nextStep}
-                  disabled={!answers[currentQuestion.id]}
-                  className="flex items-center space-x-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-8 py-3 rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl disabled:from-gray-300 disabled:to-gray-300 disabled:cursor-not-allowed disabled:shadow-none transform hover:scale-105 disabled:transform-none"
-                >
-                  <span>Continue</span>
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              )}
+
+                {currentStep === defaultQuestions.length - 1 ? (
+                  <button
+                    onClick={submit}
+                    disabled={!answers[currentQuestion.id]}
+                    className="inline-flex items-center gap-2 rounded-full bg-emerald-800 px-8 py-4 text-white transition-all duration-300 hover:-translate-y-1 hover:bg-emerald-700 hover:shadow-lg disabled:cursor-not-allowed disabled:bg-stone-300 dark:disabled:bg-stone-700 disabled:shadow-none"
+                  >
+                    <span>Complete Check-In</span>
+                    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </button>
+                ) : (
+                  <button
+                    onClick={nextStep}
+                    disabled={!answers[currentQuestion.id]}
+                    className="inline-flex items-center gap-2 rounded-full bg-emerald-800 px-8 py-4 text-white transition-all duration-300 hover:-translate-y-1 hover:bg-emerald-700 hover:shadow-lg disabled:cursor-not-allowed disabled:bg-stone-300 dark:disabled:bg-stone-700 disabled:shadow-none"
+                  >
+                    <span>Continue</span>
+                    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Helper text */}
-        <div className="text-center mt-6 text-gray-500 dark:text-gray-400 text-sm">
+        <div className={`mt-6 text-center text-sm ${isDark ? 'text-[#D9DDDC]' : 'text-stone-500'}`}>
           <p>Your responses are private and help us understand your health better</p>
         </div>
       </div>
-    </div>
+    </section>
   )
 }

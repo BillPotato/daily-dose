@@ -41,63 +41,63 @@ const SignUp = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 w-full max-w-md">
+    <div className="min-h-screen bg-[#F9F8F4] dark:bg-stone-950 flex items-center justify-center p-4">
+      <div className="bg-white dark:bg-[#252A27] rounded-2xl shadow-xl p-8 w-full max-w-md border border-stone-200 dark:border-white/15">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Create Account</h1>
-          <p className="text-gray-600 dark:text-gray-400">Join Patient Helper today</p>
+          <h1 className="text-3xl font-bold text-stone-900 dark:text-[#F1F3F2] mb-2">Create Account</h1>
+          <p className="text-stone-600 dark:text-[#D9DDDC]">Join Daily Dose today</p>
         </div>
 
         {error && (
-          <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg mb-6 text-center">
+          <div className="bg-stone-100 dark:bg-stone-800 border border-stone-300 dark:border-white/15 text-stone-700 dark:text-[#D9DDDC] px-4 py-3 rounded-lg mb-6 text-center">
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Full Name</label>
+            <label className="block text-sm font-medium text-stone-700 dark:text-[#D9DDDC] mb-2">Full Name</label>
             <input
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+              className="w-full px-4 py-3 border border-stone-300 dark:border-white/15 rounded-lg focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 outline-none transition bg-white dark:bg-[#2A312D] text-stone-900 dark:text-[#F1F3F2] placeholder-stone-500 dark:placeholder-stone-400"
               placeholder="Enter your full name"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
+            <label className="block text-sm font-medium text-stone-700 dark:text-[#D9DDDC] mb-2">Email</label>
             <input
               type="email"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+              className="w-full px-4 py-3 border border-stone-300 dark:border-white/15 rounded-lg focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 outline-none transition bg-white dark:bg-[#2A312D] text-stone-900 dark:text-[#F1F3F2] placeholder-stone-500 dark:placeholder-stone-400"
               placeholder="Enter your email"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Password</label>
+            <label className="block text-sm font-medium text-stone-700 dark:text-[#D9DDDC] mb-2">Password</label>
             <input
               type="password"
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+              className="w-full px-4 py-3 border border-stone-300 dark:border-white/15 rounded-lg focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 outline-none transition bg-white dark:bg-[#2A312D] text-stone-900 dark:text-[#F1F3F2] placeholder-stone-500 dark:placeholder-stone-400"
               placeholder="Create a password"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Confirm Password</label>
+            <label className="block text-sm font-medium text-stone-700 dark:text-[#D9DDDC] mb-2">Confirm Password</label>
             <input
               type="password"
               value={formData.confirmPassword}
               onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+              className="w-full px-4 py-3 border border-stone-300 dark:border-white/15 rounded-lg focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 outline-none transition bg-white dark:bg-[#2A312D] text-stone-900 dark:text-[#F1F3F2] placeholder-stone-500 dark:placeholder-stone-400"
               placeholder="Confirm your password"
               required
             />
@@ -106,7 +106,7 @@ const SignUp = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center"
+            className="w-full bg-emerald-800 hover:bg-emerald-700 disabled:bg-stone-400 dark:disabled:bg-stone-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center"
           >
             {loading ? (
               <>
@@ -120,9 +120,9 @@ const SignUp = () => {
         </form>
 
         <div className="mt-8 text-center">
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-stone-600 dark:text-[#D9DDDC]">
             Already have an account?{' '}
-            <Link href="/auth/signin" className="text-blue-600 hover:text-blue-700 font-semibold dark:text-blue-400 dark:hover:text-blue-300">
+            <Link href="/auth/signin" className="text-emerald-700 hover:text-emerald-800 font-semibold dark:text-emerald-300 dark:hover:text-emerald-200">
               Sign In
             </Link>
           </p>

@@ -32,17 +32,17 @@ export default function FeelingAnalyzerPage() {
   return (
     <div
       className={`min-h-screen py-8 theme-transition ${
-        isDark ? "bg-slate-900" : "bg-gradient-to-br from-slate-50 to-blue-50/50"
+        isDark ? "bg-stone-950" : "bg-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4">
         <div className="mb-12">
           <button
             onClick={() => router.push("/")}
-            className={`inline-flex items-center space-x-2 mb-6 transition-all duration-300 hover:scale-105 backdrop-blur-sm px-4 py-2 rounded-xl shadow-sm border ${
+            className={`inline-flex items-center space-x-2 mb-6 transition-all duration-300 hover:scale-105 px-4 py-2 rounded-xl shadow-sm border ${
               isDark
-                ? "text-gray-400 hover:text-white bg-gray-800/80 border-gray-700 hover:border-gray-500"
-                : "text-gray-600 hover:text-gray-900 bg-white/80 border-gray-200 hover:border-gray-300"
+                ? "text-stone-300 hover:text-stone-100 bg-stone-900 border-stone-700 hover:border-stone-500"
+                : "text-stone-600 hover:text-emerald-900 bg-white border-stone-200 hover:border-stone-300"
             }`}
           >
             <span>←</span>
@@ -50,12 +50,12 @@ export default function FeelingAnalyzerPage() {
           </button>
 
           <div className="text-center">
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+            <h1 className="text-5xl font-semibold text-emerald-950 dark:text-[#F1F3F2] mb-4">
               Feeling Analyzer
             </h1>
             <p
               className={`text-xl max-w-2xl mx-auto ${
-                isDark ? "text-gray-400" : "text-gray-600"
+                isDark ? "text-stone-300" : "text-stone-600"
               }`}
             >
               Describe how you&apos;re feeling and get personalized health insights and

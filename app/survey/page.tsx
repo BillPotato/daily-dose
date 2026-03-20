@@ -12,8 +12,8 @@ export default function SurveyPage() {
     <div
       className={`min-h-screen theme-transition ${
         isDark
-          ? "bg-slate-900"
-          : "bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50"
+          ? "bg-stone-950"
+          : "bg-transparent"
       }`}
     >
       <Survey />

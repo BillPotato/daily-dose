@@ -101,26 +101,26 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
     const chartConfig = {
       mood: {
         label: 'Mood Level',
-        color: isDark ? 'rgba(96, 165, 250, 0.8)' : 'rgba(59, 130, 246, 0.8)',
-        bgColor: isDark ? 'rgba(96, 165, 250, 0.1)' : 'rgba(59, 130, 246, 0.1)',
+        color: '#065f46',
+        bgColor: 'rgba(6, 95, 70, 0.05)',
         max: 5
       },
       pain: {
         label: 'Pain Level',
-        color: isDark ? 'rgba(248, 113, 113, 0.8)' : 'rgba(239, 68, 68, 0.8)',
-        bgColor: isDark ? 'rgba(248, 113, 113, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+        color: '#065f46',
+        bgColor: 'rgba(6, 95, 70, 0.05)',
         max: 10
       },
       exercise: {
         label: 'Exercise (minutes)',
-        color: isDark ? 'rgba(52, 211, 153, 0.8)' : 'rgba(16, 185, 129, 0.8)',
-        bgColor: isDark ? 'rgba(52, 211, 153, 0.1)' : 'rgba(16, 185, 129, 0.1)',
+        color: '#065f46',
+        bgColor: 'rgba(6, 95, 70, 0.05)',
         max: Math.max(...data, 60)
       },
       sleep: {
         label: 'Sleep Quality',
-        color: isDark ? 'rgba(167, 139, 250, 0.8)' : 'rgba(139, 92, 246, 0.8)',
-        bgColor: isDark ? 'rgba(167, 139, 250, 0.1)' : 'rgba(139, 92, 246, 0.1)',
+        color: '#065f46',
+        bgColor: 'rgba(6, 95, 70, 0.05)',
         max: 5
       }
     };
@@ -139,7 +139,7 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
           fill: true,
           tension: 0.4,
           pointBackgroundColor: config.color,
-          pointBorderColor: isDark ? '#1f2937' : '#fff',
+          pointBorderColor: isDark ? '#252A27' : '#fff',
           pointBorderWidth: 2,
           pointRadius: 6,
           pointHoverRadius: 8,
@@ -166,13 +166,13 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
           size: 16,
           weight: 'bold'
         },
-        color: isDark ? '#f9fafb' : '#1f2937'
+        color: isDark ? '#F1F3F2' : '#1f2937'
       },
       tooltip: {
-        backgroundColor: isDark ? 'rgba(31, 41, 55, 0.95)' : 'rgba(255, 255, 255, 0.95)',
-        titleColor: isDark ? '#f9fafb' : '#1f2937',
-        bodyColor: isDark ? '#d1d5db' : '#4b5563',
-        borderColor: isDark ? '#374151' : '#e5e7eb',
+        backgroundColor: isDark ? 'rgba(37, 42, 39, 0.96)' : 'rgba(255, 255, 255, 0.95)',
+        titleColor: isDark ? '#F1F3F2' : '#1f2937',
+        bodyColor: isDark ? '#D9DDDC' : '#4b5563',
+        borderColor: isDark ? '#4B5A54' : '#e5e7eb',
         borderWidth: 1,
         cornerRadius: 8,
         displayColors: false,
@@ -182,19 +182,25 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
       y: {
         beginAtZero: true,
         max: chartData.datasets[0]?.data.length > 0 ? Math.max(...chartData.datasets[0].data) * 1.1 : 10,
+        border: {
+          display: false,
+        },
         grid: {
-          color: isDark ? 'rgba(55, 65, 81, 0.5)' : 'rgba(0, 0, 0, 0.05)'
+          color: 'rgba(0,0,0,0.03)'
         },
         ticks: {
-          color: isDark ? '#9ca3af' : '#6b7280'
+          color: isDark ? '#D9DDDC' : '#57534e'
         }
       },
       x: {
+        border: {
+          display: false,
+        },
         grid: {
-          display: false
+          color: 'rgba(0,0,0,0.03)'
         },
         ticks: {
-          color: isDark ? '#9ca3af' : '#6b7280'
+          color: isDark ? '#D9DDDC' : '#57534e'
         }
       }
     }
@@ -203,12 +209,12 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
   const ChartTypeButton = ({ type, label, icon, isActive }) => (
     <button
       onClick={() => setChartType(type)}
-      className={`flex items-center space-x-3 px-6 py-4 rounded-xl transition-all duration-300 ${isActive
-        ? 'bg-blue-600 text-white shadow-lg transform scale-105'
+      className={`flex items-center space-x-3 rounded-full px-6 py-4 transition-all duration-300 ${isActive
+        ? 'bg-emerald-800 text-white shadow-md'
         : `${isDark
-          ? 'bg-gray-800 text-gray-200 hover:bg-gray-700'
-          : 'bg-white/80 text-gray-700 hover:bg-white'
-        } hover:shadow-md`
+          ? 'bg-stone-800 text-stone-200 hover:bg-stone-700'
+          : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
+        }`
         }`}
     >
       <span className="text-xl">{icon}</span>
@@ -219,11 +225,11 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
   const TabButton = ({ tab, label, icon, isActive }) => (
     <button
       onClick={() => setActiveTab(tab)}
-      className={`flex items-center space-x-3 px-6 py-3 rounded-xl font-semibold transition-all ${isActive
-        ? 'bg-blue-600 text-white shadow-lg transform scale-105'
+      className={`flex items-center space-x-3 rounded-full px-7 py-4 font-semibold transition-all ${isActive
+        ? 'bg-emerald-800 text-white shadow-md'
         : `${isDark
-          ? 'bg-gray-800 text-gray-200 hover:bg-gray-700'
-          : 'bg-white text-gray-700 hover:bg-gray-50'
+          ? 'bg-stone-800 text-stone-200 hover:bg-stone-700'
+          : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
         }`
         }`}
     >
@@ -233,17 +239,17 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
   );
 
   return (
-    <div className="space-y-8 pt-4">
+    <div className="space-y-16 pt-8">
       {/* Welcome Section - Simplified without header elements */}
-      <div className="text-center">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+      <div className="space-y-4 text-center">
+        <h1 className="text-5xl font-semibold text-emerald-950 dark:text-[#F1F3F2] md:text-6xl">
           Welcome back, {user.name || 'there'}!
         </h1>
-        <p className="text-gray-600 dark:text-gray-400 mt-2 text-lg">Here's your health overview for today</p>
+        <p className="text-lg text-stone-600 dark:text-stone-300">Here's your health overview for today</p>
       </div>
 
       {/* Tab Navigation */}
-      <div className="flex space-x-4">
+      <div className="flex flex-wrap gap-4">
         <TabButton
           tab="overview"
           label="Overview"
@@ -262,13 +268,12 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
       {activeTab === 'overview' ? (
         <>
           {/* Stats Grid - ALL CARDS ARE NOW INTERACTIVE */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
             <InteractiveStatBox
               title="Total Surveys"
               value={stats.totalSurveys}
               subtitle="This month"
               icon="📊"
-              gradient="from-blue-500 to-cyan-500"
               type="surveys"
             />
 
@@ -277,7 +282,6 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
               value={stats.avgMood}
               subtitle="Out of 5"
               icon="😊"
-              gradient="from-green-500 to-emerald-500"
               type="mood"
               additionalData={{ exercise: stats.avgExercise }}
             />
@@ -287,7 +291,6 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
               value={stats.avgPain}
               subtitle="Out of 10"
               icon="🎯"
-              gradient="from-orange-500 to-red-500"
               type="pain"
             />
 
@@ -296,17 +299,15 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
               value={`${stats.avgExercise}`}
               subtitle="Minutes daily"
               icon="💪"
-              gradient="from-purple-500 to-pink-500"
               type="exercise"
               additionalData={{ surveys: stats.totalSurveys }}
             />
           </div>
 
           {/* Chart Section */}
-          <div className={`${isDark ? 'bg-gray-800/80 border-gray-700' : 'bg-white/80 border-white/60'
-            } backdrop-blur-sm rounded-3xl shadow-xl border p-8`}>
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8">
-              <h2 className={`text-2xl font-bold ${isDark ? 'text-gray-100' : 'text-gray-900'
+          <div className={`${isDark ? 'bg-stone-900 border border-stone-800' : 'bg-white border border-stone-200'} rounded-[2rem] p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)]`}>
+            <div className="mb-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+              <h2 className={`text-2xl font-bold ${isDark ? 'text-stone-100' : 'text-emerald-950'
                 } mb-4 lg:mb-0`}>Health Trends</h2>
 
               {/* Chart Type Selector */}
@@ -338,10 +339,10 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
               </div>
             </div>
 
-            <div className="h-80">
+            <div className="h-[24rem]">
               <Line data={chartData} options={chartOptions} />
               {surveys.length === 0 && (
-                <p className="mt-3 text-center text-sm text-gray-500 dark:text-gray-400">
+                <p className="mt-3 text-center text-sm text-stone-500 dark:text-stone-300">
                   Showing sample trend data. Complete a survey to replace it with your own.
                 </p>
               )}
@@ -349,37 +350,36 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
           </div>
 
           {/* Quick Actions & Tasks */}
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 gap-16 xl:grid-cols-3">
             {/* Tasks Section */}
-            <div className="xl:col-span-2 space-y-6">
+            <div className="xl:col-span-2 space-y-12">
               {/* Tasks Card */}
-              <div className={`${isDark ? 'bg-gray-800/80 border-gray-700' : 'bg-white/80 border-white/60'
-                } backdrop-blur-sm rounded-3xl shadow-xl border p-8`}>
+              <div className={`${isDark ? 'bg-stone-900 border border-stone-800' : 'bg-white border border-stone-200'} rounded-[2rem] p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)]`}>
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className={`text-xl font-semibold ${isDark ? 'text-gray-100' : 'text-gray-900'
+                  <h3 className={`text-xl font-semibold ${isDark ? 'text-stone-100' : 'text-emerald-950'
                     }`}>Medication Tasks</h3>
-                  <span className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-sm px-3 py-1 rounded-full">
+                  <span className="rounded-full bg-emerald-50 px-4 py-2 text-sm text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-200">
                     {tasks.filter(task => task.isActive).length} active tasks
                   </span>
                 </div>
 
                 {tasks.filter(task => task.isActive).length > 0 ? (
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     {tasks.filter(task => task.isActive).slice(0, 5).map((task) => (
-                      <div key={task.id} className={`flex items-center justify-between p-4 rounded-xl border transition-all duration-300 hover:shadow-md ${isDark
-                        ? 'bg-gray-700/50 border-gray-600 hover:border-blue-400'
-                        : 'bg-gradient-to-r from-gray-50 to-blue-50/30 border-gray-200/60 hover:border-blue-300'
+                      <div key={task.id} className={`flex items-center justify-between rounded-[1.5rem] p-6 transition-all duration-300 hover:shadow-md ${isDark
+                        ? 'bg-stone-800 border border-stone-700'
+                        : 'bg-stone-50 border border-stone-200 hover:-translate-y-1'
                         }`}>
                         <div className="flex items-center space-x-4">
                           <div className={`w-3 h-3 rounded-full ${task.completed && task.completed.some(comp => new Date(comp.timestamp).toDateString() === new Date().toDateString())
-                            ? 'bg-green-500'
-                            : 'bg-blue-500'
+                            ? 'bg-emerald-700'
+                            : 'bg-stone-400'
                             }`}></div>
                           <div>
-                            <span className={`font-medium ${isDark ? 'text-gray-100' : 'text-gray-800'
+                            <span className={`font-medium ${isDark ? 'text-stone-100' : 'text-stone-800'
                               }`}>{task.title}</span>
                             <div className="flex items-center space-x-2 mt-1">
-                              <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'
+                              <span className={`text-xs ${isDark ? 'text-stone-300' : 'text-stone-500'
                                 }`}>
                                 {task.times?.join(', ') || 'No times set'}
                               </span>
@@ -387,14 +387,11 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
                           </div>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <span className={`px-3 py-1 text-xs rounded-full ${task.frequency === 'daily'
-                            ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
-                            : 'bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200'
-                            }`}>
+                          <span className="px-3 py-1 text-xs rounded-full bg-emerald-50 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-200">
                             {task.frequency}
                           </span>
                           {task.completed && task.completed.some(comp => new Date(comp.timestamp).toDateString() === new Date().toDateString()) && (
-                            <span className="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs rounded-full">
+                            <span className="px-2 py-1 text-xs rounded-full bg-emerald-50 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-200">
                               Completed
                             </span>
                           )}
@@ -402,7 +399,7 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
                       </div>
                     ))}
                     {tasks.filter(task => task.isActive).length > 5 && (
-                      <p className={`text-center text-sm mt-4 ${isDark ? 'text-gray-400' : 'text-gray-500'
+                      <p className={`text-center text-sm mt-4 ${isDark ? 'text-stone-300' : 'text-stone-500'
                         }`}>
                         +{tasks.filter(task => task.isActive).length - 5} more tasks
                       </p>
@@ -411,11 +408,11 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
                 ) : (
                   <div className="text-center py-8">
                     <div className="text-6xl mb-4">💊</div>
-                    <p className={`mb-4 ${isDark ? 'text-gray-400' : 'text-gray-500'
+                    <p className={`mb-4 ${isDark ? 'text-stone-300' : 'text-stone-500'
                       }`}>No medication tasks yet</p>
                     <button
                       onClick={() => router.push('/medication-parser')}
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl transition-colors"
+                      className="rounded-full bg-emerald-800 px-8 py-4 text-white transition-all duration-300 hover:-translate-y-1 hover:bg-emerald-900 hover:shadow-lg"
                     >
                       Add Medications
                     </button>
@@ -424,19 +421,18 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
               </div>
 
               {/* Recent Surveys */}
-              <div className={`${isDark ? 'bg-gray-800/80 border-gray-700' : 'bg-white/80 border-white/60'
-                } backdrop-blur-sm rounded-3xl shadow-xl border p-8`}>
-                <h3 className={`text-xl font-semibold ${isDark ? 'text-gray-100' : 'text-gray-900'
+              <div className={`${isDark ? 'bg-stone-900 border border-stone-800' : 'bg-white border border-stone-200'} rounded-[2rem] p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)]`}>
+                <h3 className={`text-xl font-semibold ${isDark ? 'text-stone-100' : 'text-emerald-950'
                   } mb-6`}>Recent Surveys</h3>
                 {surveys.slice(0, 5).map((survey) => (
-                  <div key={survey.id} className={`flex items-center justify-between py-4 border-b ${isDark ? 'border-gray-700' : 'border-gray-200/60'
+                  <div key={survey.id} className={`flex items-center justify-between py-4 border-b ${isDark ? 'border-stone-700' : 'border-stone-200'
                     } last:border-0`}>
                     <div>
-                      <p className={`font-medium ${isDark ? 'text-gray-100' : 'text-gray-900'
+                      <p className={`font-medium ${isDark ? 'text-stone-100' : 'text-stone-800'
                         }`}>
                         {new Date(survey.date).toLocaleDateString()}
                       </p>
-                      <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'
+                      <p className={`text-sm ${isDark ? 'text-stone-300' : 'text-stone-600'
                         }`}>
                         Mood: {survey.answers.mood}/5 • Pain: {survey.answers.pain}/10
                       </p>
@@ -450,11 +446,11 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
                 {surveys.length === 0 && (
                   <div className="text-center py-8">
                     <div className="text-6xl mb-4">📝</div>
-                    <p className={`mb-4 ${isDark ? 'text-gray-400' : 'text-gray-500'
+                    <p className={`mb-4 ${isDark ? 'text-stone-300' : 'text-stone-500'
                       }`}>No surveys completed yet</p>
                     <button
                       onClick={() => router.push('/survey')}
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl transition-colors"
+                      className="rounded-full bg-emerald-800 px-8 py-4 text-white transition-all duration-300 hover:-translate-y-1 hover:bg-emerald-900 hover:shadow-lg"
                     >
                       Take First Survey
                     </button>
@@ -464,56 +460,55 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
             </div>
 
             {/* Quick Actions Sidebar */}
-            <div className="space-y-6">
-              <div className={`${isDark ? 'bg-gray-800/80 border-gray-700' : 'bg-white/80 border-white/60'
-                } backdrop-blur-sm rounded-3xl shadow-xl border p-8`}>
-                <h3 className={`text-xl font-semibold ${isDark ? 'text-gray-100' : 'text-gray-900'
+            <div className="space-y-10">
+              <div className={`${isDark ? 'bg-stone-900 border border-stone-800' : 'bg-white border border-stone-200'} rounded-[2rem] p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)]`}>
+                <h3 className={`text-xl font-semibold ${isDark ? 'text-stone-100' : 'text-emerald-950'
                   } mb-6`}>Quick Actions</h3>
                 <div className="space-y-4">
                   <button
                     onClick={() => router.push('/survey')}
-                    className={`w-full flex items-center space-x-4 p-6 rounded-xl transition-all duration-300 border hover:shadow-lg transform hover:scale-[1.02] text-left ${isDark
-                      ? 'bg-gray-700/50 border-gray-600 hover:border-blue-400'
-                      : 'bg-gradient-to-r from-blue-50 to-cyan-50/50 border-blue-200/60 hover:border-blue-300'
+                    className={`w-full flex items-center space-x-4 rounded-[1.5rem] p-6 text-left transition-all duration-300 hover:shadow-lg transform hover:scale-[1.02] ${isDark
+                      ? 'bg-stone-800 border border-stone-700'
+                      : 'bg-stone-50 border border-stone-200 hover:-translate-y-1'
                       }`}
                   >
                     <div className="text-2xl">📝</div>
                     <div>
-                      <p className={`font-medium ${isDark ? 'text-gray-100' : 'text-gray-900'
+                      <p className={`font-medium ${isDark ? 'text-stone-100' : 'text-stone-800'
                         }`}>Daily Survey</p>
-                      <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'
+                      <p className={`text-sm ${isDark ? 'text-stone-300' : 'text-stone-600'
                         }`}>Complete your check-in</p>
                     </div>
                   </button>
 
                   <button
                     onClick={() => router.push('/feeling-analyzer')}
-                    className={`w-full flex items-center space-x-4 p-6 rounded-xl transition-all duration-300 border hover:shadow-lg transform hover:scale-[1.02] text-left ${isDark
-                      ? 'bg-gray-700/50 border-gray-600 hover:border-green-400'
-                      : 'bg-gradient-to-r from-green-50 to-emerald-50/50 border-green-200/60 hover:border-green-300'
+                    className={`w-full flex items-center space-x-4 rounded-[1.5rem] p-6 text-left transition-all duration-300 hover:shadow-lg transform hover:scale-[1.02] ${isDark
+                      ? 'bg-stone-800 border border-stone-700'
+                      : 'bg-stone-50 border border-stone-200 hover:-translate-y-1'
                       }`}
                   >
                     <div className="text-2xl">😊</div>
                     <div>
-                      <p className={`font-medium ${isDark ? 'text-gray-100' : 'text-gray-900'
+                      <p className={`font-medium ${isDark ? 'text-stone-100' : 'text-stone-800'
                         }`}>Feeling Analyzer</p>
-                      <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'
+                      <p className={`text-sm ${isDark ? 'text-stone-300' : 'text-stone-600'
                         }`}>Get insights</p>
                     </div>
                   </button>
 
                   <button
                     onClick={() => router.push('/medication-parser')}
-                    className={`w-full flex items-center space-x-4 p-6 rounded-xl transition-all duration-300 border hover:shadow-lg transform hover:scale-[1.02] text-left ${isDark
-                      ? 'bg-gray-700/50 border-gray-600 hover:border-purple-400'
-                      : 'bg-gradient-to-r from-purple-50 to-pink-50/50 border-purple-200/60 hover:border-purple-300'
+                    className={`w-full flex items-center space-x-4 rounded-[1.5rem] p-6 text-left transition-all duration-300 hover:shadow-lg transform hover:scale-[1.02] ${isDark
+                      ? 'bg-stone-800 border border-stone-700'
+                      : 'bg-stone-50 border border-stone-200 hover:-translate-y-1'
                       }`}
                   >
                     <div className="text-2xl">💊</div>
                     <div>
-                      <p className={`font-medium ${isDark ? 'text-gray-100' : 'text-gray-900'
+                      <p className={`font-medium ${isDark ? 'text-stone-100' : 'text-stone-800'
                         }`}>Add Medications</p>
-                      <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'
+                      <p className={`text-sm ${isDark ? 'text-stone-300' : 'text-stone-600'
                         }`}>Manage your prescriptions</p>
                     </div>
                   </button>
@@ -521,34 +516,34 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
               </div>
 
               {/* Health Tips */}
-              <div className={`bg-gradient-to-br rounded-3xl p-8 border shadow-lg ${isDark
-                ? 'from-emerald-900/50 to-green-800/50 border-emerald-700'
-                : 'from-emerald-50 to-green-100/50 border-emerald-200/60'
+              <div className={`rounded-[2rem] p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] ${isDark
+                ? 'bg-stone-900 border border-stone-800'
+                : 'bg-white border border-stone-200'
                 }`}>
-                <h3 className={`font-semibold mb-4 flex items-center text-lg ${isDark ? 'text-gray-100' : 'text-gray-900'
+                <h3 className={`font-semibold mb-4 flex items-center text-lg ${isDark ? 'text-stone-100' : 'text-emerald-950'
                   }`}>
                   <span className="text-2xl mr-3">💡</span>
                   Health Tips
                 </h3>
-                <ul className={`space-y-3 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'
+                <ul className={`space-y-3 text-sm ${isDark ? 'text-stone-300' : 'text-stone-700'
                   }`}>
                   <li className="flex items-start space-x-3">
-                    <span className={`mt-1 text-lg ${isDark ? 'text-emerald-400' : 'text-emerald-500'
+                    <span className={`mt-1 text-lg ${isDark ? 'text-emerald-300' : 'text-emerald-700'
                       }`}>•</span>
                     <span className="leading-relaxed">Stay hydrated throughout the day</span>
                   </li>
                   <li className="flex items-start space-x-3">
-                    <span className={`mt-1 text-lg ${isDark ? 'text-emerald-400' : 'text-emerald-500'
+                    <span className={`mt-1 text-lg ${isDark ? 'text-emerald-300' : 'text-emerald-700'
                       }`}>•</span>
                     <span className="leading-relaxed">Take regular breaks if sitting for long</span>
                   </li>
                   <li className="flex items-start space-x-3">
-                    <span className={`mt-1 text-lg ${isDark ? 'text-emerald-400' : 'text-emerald-500'
+                    <span className={`mt-1 text-lg ${isDark ? 'text-emerald-300' : 'text-emerald-700'
                       }`}>•</span>
                     <span className="leading-relaxed">Practice deep breathing exercises</span>
                   </li>
                   <li className="flex items-start space-x-3">
-                    <span className={`mt-1 text-lg ${isDark ? 'text-emerald-400' : 'text-emerald-500'
+                    <span className={`mt-1 text-lg ${isDark ? 'text-emerald-300' : 'text-emerald-700'
                       }`}>•</span>
                     <span className="leading-relaxed">Maintain consistent sleep schedule</span>
                   </li>

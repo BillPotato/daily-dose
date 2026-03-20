@@ -29,8 +29,8 @@ const Header = () => {
     <header className={`
       sticky top-0 z-50 
       ${isDark
-        ? 'bg-gray-900/95 backdrop-blur-md border-b border-gray-700'
-        : 'bg-white/95 backdrop-blur-md border-b border-gray-200'
+        ? 'bg-stone-900 border-b border-stone-800'
+        : 'bg-[#F9F8F4] border-b border-stone-200'
       }
       transition-all duration-300
     `}>
@@ -46,7 +46,7 @@ const Header = () => {
 
           {/* Right: User info and controls */}
           <div className="flex items-center space-x-4">
-            <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+            <span className={`text-sm ${isDark ? 'text-stone-300' : 'text-stone-600'}`}>
               Welcome, {user.name || 'User'}
             </span>
             <a
@@ -55,8 +55,8 @@ const Header = () => {
               rel="noopener noreferrer"
               className={`inline-flex items-center space-x-2 rounded-xl px-3 py-2 transition-all duration-300 ${
                 isDark
-                  ? 'text-gray-300 hover:bg-gray-800 hover:text-white'
-                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                  ? 'text-stone-300 hover:text-emerald-200'
+                  : 'text-stone-600 hover:text-emerald-800'
               }`}
               aria-label="View source code on GitHub"
               title="GitHub Repository"
@@ -72,8 +72,8 @@ const Header = () => {
               className={`
                 px-4 py-2 rounded-xl font-medium transition-all duration-300
                 ${isDark
-                  ? 'bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-600'
-                  : 'bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-300'
+                  ? 'bg-stone-800 hover:bg-stone-700 text-stone-100 border border-stone-700'
+                  : 'bg-white hover:bg-stone-50 text-stone-700 border border-stone-300'
                 }
                 hover:shadow-lg transform hover:scale-105
               `}

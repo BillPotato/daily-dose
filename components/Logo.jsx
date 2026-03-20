@@ -6,8 +6,8 @@ const Logo = ({ size = 'medium' }) => {
   const { isDark } = useTheme();
 
   return (
-    <div className={`flex items-center space-x-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-      <div className="w-12 h-12 rounded-2xl overflow-hidden shadow-lg border border-gray-200 bg-gray-50 relative">
+    <div className={`flex items-center space-x-3 ${isDark ? 'text-stone-100' : 'text-emerald-950'}`}>
+      <div className="w-12 h-12 rounded-2xl overflow-hidden shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border border-stone-200 bg-white relative">
         <img
           src="/dailydose.png"
           alt="Daily Dose Logo"
@@ -16,10 +16,10 @@ const Logo = ({ size = 'medium' }) => {
       </div>
 
       <div className="flex flex-col">
-        <span className="font-bold text-lg bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <span className="font-serif font-semibold text-lg text-emerald-900">
           DAILY DOSE
         </span>
-        <span className={`text-xs opacity-75 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+        <span className={`text-xs opacity-80 ${isDark ? 'text-stone-300' : 'text-stone-600'}`}>
           Fuel Your Best Day
         </span>
       </div>
