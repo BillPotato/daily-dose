@@ -79,7 +79,8 @@ export default function Survey({ onSubmit }) {
     }
     const parsed = JSON.parse(localStorage.getItem('surveys') || '[]')
     const existing = Array.isArray(parsed) ? parsed : []
-    const updatedSurveys = [payload, ...existing].slice(0, SURVEY_WINDOW_SIZE)
+    const chronological = [...existing].sort((a, b) => new Date(a.date) - new Date(b.date))
+    const updatedSurveys = [...chronological, payload].slice(-SURVEY_WINDOW_SIZE)
     localStorage.setItem('surveys', JSON.stringify(updatedSurveys))
     onSubmit && onSubmit(payload)
 
