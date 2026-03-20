@@ -132,7 +132,7 @@ Multivitamin once daily`
     onSave(parsedTasks);
     setText('');
     setParsedTasks([]);
-    router.push('/dashboard');
+    router.push('/');
     toast.success('Tasks saved successfully!');
   }
 
@@ -207,7 +207,7 @@ Multivitamin once daily`
         <div className="mb-8">
           {/* Back Button - Aligned to the left */}
           <button
-            onClick={() => router.push('/dashboard')}
+            onClick={() => router.push('/')}
             className={`inline-flex items-center space-x-2 mb-6 transition-all duration-300 hover:scale-105 px-4 py-2 rounded-lg border ${isDark
               ? 'text-gray-400 hover:text-white bg-gray-800/80 border-gray-700 hover:border-gray-500'
               : 'text-gray-600 hover:text-gray-900 bg-white/80 border-gray-300 hover:border-gray-400'

@@ -23,7 +23,7 @@ const SignIn = () => {
           name: 'Test User',
           email: formData.email
         }));
-        router.push('/dashboard');
+        router.push('/');
       } else {
         setError('Invalid credentials. Use: test@test.com / password');
         setLoading(false);

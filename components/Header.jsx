@@ -38,7 +38,7 @@ const Header = () => {
         <div className="flex justify-between items-center h-16">
           {/* Left: Logo */}
           <button
-            onClick={() => router.push('/dashboard')}
+            onClick={() => router.push('/')}
             className="flex items-center space-x-4 group"
           >
             <Logo size="medium" />

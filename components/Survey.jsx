@@ -94,7 +94,7 @@ export default function Survey({ onSubmit }) {
     setCurrentStep(0)
 
     alert('Thank you for sharing! Your responses help us support you better.')
-    router.push('/dashboard')
+    router.push('/')
   }
 
   const currentQuestion = defaultQuestions[currentStep]
@@ -181,7 +181,7 @@ export default function Survey({ onSubmit }) {
 
             {/* Back Button with Border */}
             <button
-              onClick={() => router.push('/dashboard')}
+              onClick={() => router.push('/')}
               className="relative flex items-center space-x-2 px-4 py-2 rounded-lg border-2 border-white/30 hover:border-white/50 text-white/90 hover:text-white mb-6 transition-all duration-300 group backdrop-blur-sm bg-white/10 hover:bg-white/20"
             >
               <svg className="w-5 h-5 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">

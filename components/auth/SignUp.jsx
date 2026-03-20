@@ -36,7 +36,7 @@ const SignUp = () => {
       localStorage.setItem('tasks', JSON.stringify([]));
       localStorage.setItem('surveys', JSON.stringify([]));
       // Use window.location to avoid React Router navigation issues
-      router.push('/dashboard');
+      router.push('/');
     }, 1000);
   };
 
