@@ -108,6 +108,7 @@ export default function FeelingAnalyzer({ onTasksGenerated, onAnalysisComplete }
   };
 
   const addToCalendar = async (content) => {
+    if (isAnalyzing) return;
     console.log(`Passed to parser: ${content}`)
     setIsAnalyzing(true);
     setError('');
@@ -156,6 +157,7 @@ export default function FeelingAnalyzer({ onTasksGenerated, onAnalysisComplete }
           toast.info("Calendar links ready for review");
         }
     } catch (err) {
+      console.error("Task generation failed:", err);
         if (err?.response?.status === 429) {
           const quotaMessage = 'You have reached your limit of 15 queries. Please try again later.';
           setRateLimitReached(true);

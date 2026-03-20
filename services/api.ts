@@ -35,11 +35,26 @@ api.interceptors.response.use(
 
 export const feelingAnalyzerAPI = {
   analyzeSymptoms: async (symptoms: string) => {
-    const response = await api.post("/parser", {
-      content: symptoms,
-      timestamp: new Date().toISOString(),
-      userId: JSON.parse(localStorage.getItem("user") || "{}").email,
-    });
+    const response = await api.post(
+      "/parser",
+      {
+        content: symptoms,
+        timestamp: new Date().toISOString(),
+        userId: JSON.parse(localStorage.getItem("user") || "{}").email,
+      },
+      {
+        timeout: 60000,
+      },
+    );
+
+    if (response.status < 200 || response.status >= 300) {
+      throw new Error(`API Error: ${response.status}`);
+    }
+
+    if (!response.data || typeof response.data !== "object") {
+      throw new Error("API Error: Invalid response payload");
+    }
+
     return response.data;
   },
 };

@@ -12,9 +12,18 @@ export default function FeelingAnalyzerPage() {
 
   const handleTasksGenerated = (newTasks: AppTask[]) => {
     if (!newTasks || newTasks.length === 0) return;
-    
-    const existingTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-    const updatedTasks = [...newTasks, ...existingTasks];
+
+    const rawStoredTasks = localStorage.getItem("tasks");
+    let existingTasks: AppTask[] = [];
+
+    try {
+      const parsed = JSON.parse(rawStoredTasks || "[]");
+      existingTasks = Array.isArray(parsed) ? parsed : [];
+    } catch {
+      existingTasks = [];
+    }
+
+    const updatedTasks = [...(existingTasks || []), ...newTasks];
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
   };
 

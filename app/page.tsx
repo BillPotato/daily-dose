@@ -24,7 +24,7 @@ export default function HomePage() {
 
     try {
       const stored = JSON.parse(localStorage.getItem("tasks") || "[]");
-      setTasks(stored);
+      setTasks(Array.isArray(stored) ? stored : []);
     } catch {
       setTasks([]);
     }
