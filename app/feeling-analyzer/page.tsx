@@ -4,10 +4,19 @@ import FeelingAnalyzer from "@/components/FeelingAnalyzer";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useRouter } from "next/navigation";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
+import type { AppTask } from "@/lib/taskMapper";
 
 export default function FeelingAnalyzerPage() {
   const router = useRouter();
   const { isDark } = useTheme();
+
+  const handleTasksGenerated = (newTasks: AppTask[]) => {
+    if (!newTasks || newTasks.length === 0) return;
+    
+    const existingTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+    const updatedTasks = [...newTasks, ...existingTasks];
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+  };
 
   useAuthGuard();
 
@@ -46,7 +55,7 @@ export default function FeelingAnalyzerPage() {
           </div>
         </div>
 
-        <FeelingAnalyzer />
+        <FeelingAnalyzer onTasksGenerated={handleTasksGenerated} />
       </div>
     </div>
   );

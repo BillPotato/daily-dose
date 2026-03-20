@@ -5,11 +5,14 @@ import { useState } from 'react';
 import { feelingAnalyzerAPI } from '@/services/api';
 import { useTheme } from '@/contexts/ThemeContext';
 import { generateGoogleCalendarUrl } from '@/lib/googleCalendarUrl';
+import { mapGeminiTasksToAppTasks } from '@/lib/taskMapper';
+import TaskCard from '@/components/TaskCard';
 import { toast } from 'react-toastify';
 
-export default function FeelingAnalyzer({ onAnalysisComplete }) {
+export default function FeelingAnalyzer({ onTasksGenerated, onAnalysisComplete }) {
   const [feelingText, setFeelingText] = useState('');
   const [analysis, setAnalysis] = useState(null);
+  const [generatedTasks, setGeneratedTasks] = useState([]);
   const [calendarLinks, setCalendarLinks] = useState([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [rateLimitReached, setRateLimitReached] = useState(false);
@@ -117,6 +120,18 @@ export default function FeelingAnalyzer({ onAnalysisComplete }) {
         const parsed = typeof cleaned === 'string' ? JSON.parse(cleaned) : cleaned;
         const tasks = Array.isArray(parsed?.tasks) ? parsed.tasks : [];
 
+        // Map Gemini tasks to app tasks and save to state/localStorage
+        if (tasks.length > 0) {
+          const appTasks = mapGeminiTasksToAppTasks(tasks);
+          setGeneratedTasks(appTasks);
+          
+          // Call the callback to save tasks to parent/localStorage
+          if (onTasksGenerated) {
+            onTasksGenerated(appTasks);
+            toast.success(`Generated ${appTasks.length} health task${appTasks.length !== 1 ? 's' : ''} and added to your task list!`);
+          }
+        }
+
         const generatedLinks = tasks.map((task, index) => {
           const summary = String(task?.summary ?? `Health Task ${index + 1}`);
           const description = String(task?.description ?? '');
@@ -135,7 +150,11 @@ export default function FeelingAnalyzer({ onAnalysisComplete }) {
         });
 
         setCalendarLinks(generatedLinks);
-        toast.success("Google Calendar links generated")
+        if (generatedLinks.length === 0) {
+          toast.info("No calendar tasks could be generated from the analysis.");
+        } else {
+          toast.info("Calendar links ready for review");
+        }
     } catch (err) {
         if (err?.response?.status === 429) {
           const quotaMessage = 'You have reached your limit of 15 queries. Please try again later.';
@@ -208,19 +227,23 @@ export default function FeelingAnalyzer({ onAnalysisComplete }) {
         </div>
 
         {calendarLinks.length > 0 && (
-          <div className="mt-6 p-4 rounded-xl border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20">
-            <p className="font-semibold text-gray-900 dark:text-white mb-3">Open and save your generated tasks:</p>
-            <div className="space-y-2">
-              {calendarLinks.map((link, index) => (
-                <a
-                  key={`${link}-${index}`}
-                  href={link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block text-sm text-blue-700 dark:text-blue-300 hover:underline"
-                >
-                  Open Google Calendar task #{index + 1}
-                </a>
+          <div className="mt-6">
+            <div className="mb-4">
+              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                Generated Health Tasks
+              </h3>
+              <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                These tasks have been added to your dashboard. Click "Add" to save them to Google Calendar.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {generatedTasks.map((task) => (
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  showActionButtons={false}
+                  compact={true}
+                />
               ))}
             </div>
           </div>

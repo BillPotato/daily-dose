@@ -4,6 +4,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTheme } from '@/contexts/ThemeContext';
+import TaskCard from '@/components/TaskCard';
 
 export default function MedicationTracker({ tasks = [], onUpdateTask, onDeleteTask }) {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -208,81 +209,17 @@ export default function MedicationTracker({ tasks = [], onUpdateTask, onDeleteTa
         {pendingTasks.length > 0 ? (
           <div className="space-y-4">
             {pendingTasks.map(task => (
-              <div key={task.id} className={`p-4 rounded-xl border-2 transition-all ${isTimeForMedication(task)
-                  ? isDark
-                    ? 'border-orange-500 bg-orange-900/20 animate-pulse'
-                    : 'border-orange-400 bg-orange-50 animate-pulse'
-                  : isDark
-                    ? 'border-gray-600 bg-gray-700/50'
-                    : 'border-gray-200 bg-gray-50'
-                }`}>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    <div className="text-2xl">
-                      {task.type === 'supplement' ? '🌿' : '💊'}
-                    </div>
-                    <div>
-                      <h4 className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        {task.title}
-                      </h4>
-                      <div className="flex items-center space-x-2 mt-1">
-                        <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                          Next: {getNextReminderTime(task)}
-                        </span>
-                        <span className={`px-2 py-1 text-xs rounded-full ${task.frequency === 'once-daily'
-                            ? isDark ? 'bg-green-900/30 text-green-300' : 'bg-green-100 text-green-800'
-                            : task.frequency === 'twice-daily'
-                              ? isDark ? 'bg-blue-900/30 text-blue-300' : 'bg-blue-100 text-blue-800'
-                              : task.frequency === 'three-times-daily'
-                                ? isDark ? 'bg-purple-900/30 text-purple-300' : 'bg-purple-100 text-purple-800'
-                                : isDark ? 'bg-gray-600 text-gray-300' : 'bg-gray-100 text-gray-800'
-                          }`}>
-                          {task.frequency?.replace(/-/g, ' ') || 'as directed'}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center space-x-2">
-                    {isTimeForMedication(task) && (
-                      <span className={`px-3 py-1 text-sm rounded-full animate-pulse ${isDark ? 'bg-orange-900/30 text-orange-300' : 'bg-orange-100 text-orange-800'
-                        }`}>
-                        Time to take!
-                      </span>
-                    )}
-                    <button
-                      onClick={() => remindLater(task.id)}
-                      className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors"
-                    >
-                      Remind Later
-                    </button>
-                    <button
-                      onClick={() => markAsCompleted(task.id)}
-                      className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
-                    >
-                      Mark Complete
-                    </button>
-                  </div>
-                </div>
-
-                {/* Times */}
-                {task.times && task.times.length > 0 && (
-                  <div className="flex items-center space-x-2 mt-3">
-                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Times:</span>
-                    {task.times.map((time, index) => (
-                      <span
-                        key={index}
-                        className={`px-2 py-1 text-xs rounded ${time === getNextReminderTime(task)
-                            ? isDark ? 'bg-blue-900/30 text-blue-300 font-medium' : 'bg-blue-100 text-blue-800 font-medium'
-                            : isDark ? 'bg-gray-600 text-gray-300' : 'bg-gray-100 text-gray-600'
-                          }`}
-                      >
-                        {time}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
+              <TaskCard
+                key={task.id}
+                task={task}
+                onUpdate={safeUpdateTask}
+                onDelete={safeDeleteTask}
+                onRemindLater={remindLater}
+                isTimeForMedication={isTimeForMedication(task)}
+                nextReminderTime={getNextReminderTime(task)}
+                showActionButtons={true}
+                compact={false}
+              />
             ))}
           </div>
         ) : (

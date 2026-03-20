@@ -14,3 +14,5 @@ export function getGeminiModel() {
     },
   });
 }
+
+// TODO: switch to openrouter because gemini rpm sucks
