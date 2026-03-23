@@ -5,9 +5,10 @@ import Dashboard from "@/components/Dashboard";
 import TaskCardSkeleton from "@/components/ui/TaskCardSkeleton";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { useTheme } from "@/contexts/ThemeContext";
+import type { Task } from "@/types";
 
 export default function HomePage() {
-  const [tasks, setTasks] = useState<Record<string, any>[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [isMounted, setIsMounted] = useState(false);
   const { isDark } = useTheme();
 
@@ -30,7 +31,7 @@ export default function HomePage() {
     }
   }, [isMounted]);
 
-  const handleUpdateTask = (updatedTask: Record<string, any>) => {
+  const handleUpdateTask = (updatedTask: Task) => {
     const updatedTasks = tasks.map((task) =>
       task.id === updatedTask.id ? updatedTask : task,
     );

@@ -8,12 +8,28 @@ import { generateGoogleCalendarUrl } from '@/lib/googleCalendarUrl';
 import { mapGeminiTasksToAppTasks } from '@/lib/taskMapper';
 import TaskCard from '@/components/TaskCard';
 import { toast } from 'react-toastify';
+import type { Task } from '@/types';
 
-export default function FeelingAnalyzer({ onTasksGenerated, onAnalysisComplete }) {
+type FeelingAnalysis = {
+  issue: string;
+  recommendations: string[];
+  severity: 'low' | 'medium' | 'high';
+  emoji: string;
+  color: string;
+  source: string;
+  timestamp: string;
+};
+
+type FeelingAnalyzerProps = {
+  onTasksGenerated?: (tasks: Task[]) => void;
+  onAnalysisComplete?: (analysis: FeelingAnalysis) => void;
+};
+
+export default function FeelingAnalyzer({ onTasksGenerated, onAnalysisComplete }: FeelingAnalyzerProps) {
   const [feelingText, setFeelingText] = useState('');
-  const [analysis, setAnalysis] = useState(null);
-  const [generatedTasks, setGeneratedTasks] = useState([]);
-  const [calendarLinks, setCalendarLinks] = useState([]);
+  const [analysis, setAnalysis] = useState<FeelingAnalysis | null>(null);
+  const [generatedTasks, setGeneratedTasks] = useState<Task[]>([]);
+  const [calendarLinks, setCalendarLinks] = useState<string[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [rateLimitReached, setRateLimitReached] = useState(false);
   const [error, setError] = useState('');
@@ -53,12 +69,12 @@ export default function FeelingAnalyzer({ onTasksGenerated, onAnalysisComplete }
     }
   };
 
-  const localAnalyze = (text) => {
+  const localAnalyze = (text: string): FeelingAnalysis => {
     // ... (your existing local analysis logic)
     const t = text.toLowerCase();
-    const recs = [];
+    const recs: string[] = [];
     let issue = 'General wellness check';
-    let severity = 'low';
+    let severity: FeelingAnalysis['severity'] = 'low';
     let emoji = '🤔';
     let color = 'blue';
 
@@ -82,7 +98,7 @@ export default function FeelingAnalyzer({ onTasksGenerated, onAnalysisComplete }
     };
   };
 
-  const getSeverityColor = (severity) => {
+  const getSeverityColor = (severity: FeelingAnalysis['severity']) => {
     switch (severity) {
       case 'high': return 'bg-emerald-100 dark:bg-emerald-900/30 border-emerald-300 dark:border-emerald-700 text-emerald-800 dark:text-emerald-200';
       case 'medium': return 'bg-stone-100 dark:bg-stone-800 border-stone-300 dark:border-stone-700 text-stone-800 dark:text-stone-200';
@@ -90,7 +106,7 @@ export default function FeelingAnalyzer({ onTasksGenerated, onAnalysisComplete }
     }
   };
 
-  const stripCodeFence = (raw) => {
+  const stripCodeFence = (raw: unknown) => {
     if (typeof raw !== 'string') return raw;
     return raw
       .replace(/```(?:json)?\s*/gi, '')
@@ -98,7 +114,7 @@ export default function FeelingAnalyzer({ onTasksGenerated, onAnalysisComplete }
       .trim();
   };
 
-  const addToCalendar = async (content) => {
+  const addToCalendar = async (content: string) => {
     if (isAnalyzing) return;
     console.log(`Passed to parser: ${content}`)
     setIsAnalyzing(true);
@@ -147,9 +163,15 @@ export default function FeelingAnalyzer({ onTasksGenerated, onAnalysisComplete }
         } else {
           toast.info("Calendar links ready for review");
         }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error("Task generation failed:", err);
-        if (err?.response?.status === 429) {
+        if (
+          typeof err === 'object'
+          && err !== null
+          && 'response' in err
+          && typeof (err as { response?: { status?: number } }).response?.status === 'number'
+          && (err as { response?: { status?: number } }).response?.status === 429
+        ) {
           const quotaMessage = 'You have reached your limit of 15 queries. Please try again later.';
           setRateLimitReached(true);
           setError(quotaMessage);
@@ -163,8 +185,8 @@ export default function FeelingAnalyzer({ onTasksGenerated, onAnalysisComplete }
     
   }
 
-  const handleClick = async (content) => {
-    // await analyzeFeeling()
+  const handleClick = async (content: string) => {
+    await analyzeFeeling();
     await addToCalendar(content)
   }
 
@@ -204,7 +226,7 @@ export default function FeelingAnalyzer({ onTasksGenerated, onAnalysisComplete }
 
         <div className="flex space-x-4">
           <button
-            onClick={(e)=>handleClick(feelingText)}
+            onClick={() => handleClick(feelingText)}
             disabled={isAnalyzing || !feelingText.trim() || rateLimitReached}
             className="flex-1 bg-emerald-700 hover:bg-emerald-800 disabled:bg-stone-300 dark:disabled:bg-stone-700 text-white font-semibold py-4 px-8 rounded-full transition-all duration-300 transform hover:-translate-y-1 disabled:translate-y-0 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
           >
@@ -230,7 +252,7 @@ export default function FeelingAnalyzer({ onTasksGenerated, onAnalysisComplete }
               </p>
             </div>
             <div className={`rounded-[2rem] p-6 border ${isDark ? 'bg-[#252A27] border-white/15 shadow-[0_20px_60px_-15px_rgba(4,43,21,0.08)]' : 'bg-stone-50 border-stone-200'} grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4`}>
-              {generatedTasks.map((task) => (
+                {generatedTasks.map((task) => (
                 <TaskCard
                   key={task.id}
                   task={task}

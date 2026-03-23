@@ -5,20 +5,27 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTheme } from '@/contexts/ThemeContext';
 import TaskCard from '@/components/TaskCard';
+import type { Task } from '@/types';
 
-export default function MedicationTracker({ tasks = [], onUpdateTask, onDeleteTask }) {
+type MedicationTrackerProps = {
+  tasks: Task[];
+  onUpdateTask?: (task: Task) => void;
+  onDeleteTask?: (taskId: string) => void;
+};
+
+export default function MedicationTracker({ tasks = [], onUpdateTask, onDeleteTask }: MedicationTrackerProps) {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [showCompleted, setShowCompleted] = useState(false);
   const router = useRouter();
   const { isDark } = useTheme();
 
   // Safe function wrappers
-  const safeUpdateTask = (updatedTask) => {
+  const safeUpdateTask = (updatedTask: Task) => {
     if (typeof onUpdateTask === 'function') {
       onUpdateTask(updatedTask);
     } else {
       console.warn('onUpdateTask is not available');
-      const updatedTasks = tasks.map(task =>
+      const updatedTasks = tasks.map((task) =>
         task.id === updatedTask.id ? updatedTask : task
       );
       localStorage.setItem('tasks', JSON.stringify(updatedTasks));
@@ -26,12 +33,12 @@ export default function MedicationTracker({ tasks = [], onUpdateTask, onDeleteTa
     }
   };
 
-  const safeDeleteTask = (taskId) => {
+  const safeDeleteTask = (taskId: string) => {
     if (typeof onDeleteTask === 'function') {
       onDeleteTask(taskId);
     } else {
       console.warn('onDeleteTask is not available');
-      const updatedTasks = tasks.filter(task => task.id !== taskId);
+      const updatedTasks = tasks.filter((task) => task.id !== taskId);
       localStorage.setItem('tasks', JSON.stringify(updatedTasks));
       window.dispatchEvent(new Event('storage'));
     }
@@ -39,7 +46,7 @@ export default function MedicationTracker({ tasks = [], onUpdateTask, onDeleteTa
 
   const requestNotificationPermission = () => {
     if ('Notification' in window && Notification.permission === 'default') {
-      Notification.requestPermission().then(permission => {
+      Notification.requestPermission().then((permission) => {
         if (permission === 'granted') {
           console.log('Notification permission granted');
         }
@@ -60,9 +67,9 @@ export default function MedicationTracker({ tasks = [], onUpdateTask, onDeleteTa
     const now = new Date();
     const currentTimeString = now.toTimeString().slice(0, 5);
 
-    tasks.forEach(task => {
+    tasks.forEach((task) => {
       if (task.isActive && !isCompletedToday(task)) {
-        task.times?.forEach(time => {
+        task.times?.forEach((time) => {
           if (time === currentTimeString) {
             showNotification(task);
           }
@@ -71,7 +78,7 @@ export default function MedicationTracker({ tasks = [], onUpdateTask, onDeleteTa
     });
   };
 
-  const showNotification = (task) => {
+  const showNotification = (task: Task) => {
     if ('Notification' in window && Notification.permission === 'granted') {
       new Notification(`💊 Medication Reminder: ${task.title}`, {
         body: `Time to take your ${task.title}`,
@@ -85,58 +92,41 @@ export default function MedicationTracker({ tasks = [], onUpdateTask, onDeleteTa
     requestNotificationPermission();
   }, []);
 
-  const isCompletedToday = (task) => {
+  const isCompletedToday = (task: Task) => {
     const today = new Date().toDateString();
-    return task.completed?.some(completion =>
+    return task.completed?.some((completion) =>
       new Date(completion.timestamp).toDateString() === today
     ) || false;
   };
 
-  const isTimeForMedication = (task) => {
+  const isTimeForMedication = (task: Task) => {
     const now = new Date();
     const currentTimeString = now.toTimeString().slice(0, 5);
-    return task.times?.some(time => time === currentTimeString) || false;
+    return task.times?.some((time) => time === currentTimeString) || false;
   };
 
-  const markAsCompleted = (taskId) => {
-    const task = tasks.find(t => t.id === taskId);
-    if (task) {
-      const updatedTask = {
-        ...task,
-        completed: [
-          ...(task.completed || []),
-          {
-            timestamp: new Date().toISOString(),
-            date: new Date().toDateString()
-          }
-        ]
-      };
-      safeUpdateTask(updatedTask);
-    }
-  };
-
-  const markAsIncomplete = (taskId) => {
-    const task = tasks.find(t => t.id === taskId);
+  const markAsIncomplete = (taskId: string) => {
+    const task = tasks.find((t) => t.id === taskId);
     if (task) {
       const today = new Date().toDateString();
-      const updatedCompleted = (task.completed || []).filter(completion =>
+      const updatedCompleted = (task.completed || []).filter((completion) =>
         new Date(completion.timestamp).toDateString() !== today
       );
       safeUpdateTask({ ...task, completed: updatedCompleted });
     }
   };
 
-  const remindLater = (taskId) => {
+  const remindLater = (taskId: string) => {
     console.log(`Will remind about task ${taskId} later`);
   };
 
-  const deleteTask = (taskId) => {
+  const deleteTask = (taskId: string) => {
     if (window.confirm('Are you sure you want to delete this medication task?')) {
       safeDeleteTask(taskId);
     }
   };
 
-  const getNextReminderTime = (task) => {
+  const getNextReminderTime = (task: Task) => {
     const now = new Date();
     const currentTime = now.toTimeString().slice(0, 5);
 
@@ -150,9 +140,9 @@ export default function MedicationTracker({ tasks = [], onUpdateTask, onDeleteTa
     return task.times[0];
   };
 
-  const activeTasks = tasks.filter(task => task.isActive);
-  const completedTasksToday = activeTasks.filter(task => isCompletedToday(task));
-  const pendingTasks = activeTasks.filter(task => !isCompletedToday(task));
+  const activeTasks = tasks.filter((task) => task.isActive);
+  const completedTasksToday = activeTasks.filter((task) => isCompletedToday(task));
+  const pendingTasks = activeTasks.filter((task) => !isCompletedToday(task));
 
   return (
     <div className="space-y-10">

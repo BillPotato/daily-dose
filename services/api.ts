@@ -1,6 +1,7 @@
 "use client";
 
 import axios from "axios";
+import type { User } from "@/types";
 
 const api = axios.create({
   baseURL: "/api",
@@ -35,12 +36,14 @@ api.interceptors.response.use(
 
 export const feelingAnalyzerAPI = {
   analyzeSymptoms: async (symptoms: string) => {
+    const parsedUser = JSON.parse(localStorage.getItem("user") || "{}") as Partial<User>;
+
     const response = await api.post(
-      "/parser",
+      "/generate",
       {
         content: symptoms,
         timestamp: new Date().toISOString(),
-        userId: JSON.parse(localStorage.getItem("user") || "{}").email,
+        userId: parsedUser.email ?? "",
       },
       {
         timeout: 60000,

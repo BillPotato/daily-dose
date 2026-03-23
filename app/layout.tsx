@@ -25,6 +25,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Daily Dose",
   description: "Medication and wellness companion",
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({

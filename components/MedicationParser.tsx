@@ -6,11 +6,16 @@ import { useRouter } from 'next/navigation';
 import { useTheme } from '@/contexts/ThemeContext';
 import { generateGoogleCalendarUrl } from '@/lib/googleCalendarUrl';
 import { toast } from 'react-toastify';
+import type { Task } from '@/types';
 
-export default function MedicationParser({ onSave }) {
+type MedicationParserProps = {
+  onSave: (tasks: Task[]) => void;
+};
+
+export default function MedicationParser({ onSave }: MedicationParserProps) {
   const [text, setText] = useState('');
-  const [parsedTasks, setParsedTasks] = useState([]);
-  const [calendarLinks, setCalendarLinks] = useState([]);
+  const [parsedTasks, setParsedTasks] = useState<Task[]>([]);
+  const [calendarLinks, setCalendarLinks] = useState<string[]>([]);
   const [isParsing, setIsParsing] = useState(false);
   const router = useRouter();
   const { isDark } = useTheme();
@@ -27,7 +32,7 @@ Calcium 600mg with breakfast
 Multivitamin once daily`
   ];
 
-  function parseToTasks(input) {
+  function parseToTasks(input: string): Task[] {
     return input
       .split(/\r?\n/)
       .map((line) => line.trim())
@@ -96,8 +101,8 @@ Multivitamin once daily`
     }, 1000);
   }
 
-  function handleTimeChange(taskId, timeIndex, newTime) {
-    setParsedTasks(prev => prev.map(task => {
+  function handleTimeChange(taskId: string, timeIndex: number, newTime: string) {
+    setParsedTasks((prev) => prev.map((task) => {
       if (task.id === taskId) {
         const newTimes = [...task.times];
         newTimes[timeIndex] = newTime;
@@ -107,8 +112,8 @@ Multivitamin once daily`
     }));
   }
 
-  function addTimeSlot(taskId) {
-    setParsedTasks(prev => prev.map(task => {
+  function addTimeSlot(taskId: string) {
+    setParsedTasks((prev) => prev.map((task) => {
       if (task.id === taskId) {
         return { ...task, times: [...task.times, '08:00'] };
       }
@@ -116,8 +121,8 @@ Multivitamin once daily`
     }));
   }
 
-  function removeTimeSlot(taskId, timeIndex) {
-    setParsedTasks(prev => prev.map(task => {
+  function removeTimeSlot(taskId: string, timeIndex: number) {
+    setParsedTasks((prev) => prev.map((task) => {
       if (task.id === taskId && task.times.length > 1) {
         const newTimes = task.times.filter((_, index) => index !== timeIndex);
         return { ...task, times: newTimes };
@@ -136,13 +141,13 @@ Multivitamin once daily`
     toast.success('Tasks saved successfully!');
   }
 
-  function loadExample(exampleText) {
+  function loadExample(exampleText: string) {
     setText(exampleText);
     setParsedTasks([]);
     setCalendarLinks([]);
   }
 
-  const getFrequencyColor = (frequency) => {
+  const getFrequencyColor = (frequency: string) => {
     const colors = {
       'once-daily': 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300',
       'twice-daily': 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-200',
@@ -155,7 +160,7 @@ Multivitamin once daily`
     return colors[frequency] || 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-200';
   };
 
-  const getTypeIcon = (type) => {
+  const getTypeIcon = (type: string) => {
     const icons = {
       'medication': '💊',
       'supplement': '🌿'
@@ -169,7 +174,7 @@ Multivitamin once daily`
     const now = new Date();
 
     try {
-      const links = parsedTasks.flatMap(task => {
+      const links = parsedTasks.flatMap((task) => {
         const times = Array.isArray(task.times) && task.times.length > 0 ? task.times : ['08:00'];
 
         return times.map((time) => {
@@ -194,7 +199,7 @@ Multivitamin once daily`
       setCalendarLinks(links);
 
       toast.success('Google Calendar links generated successfully!');
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error adding to calendar:', error);
       toast.error('Failed to generate Google Calendar links.');
     }

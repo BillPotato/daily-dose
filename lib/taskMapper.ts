@@ -25,7 +25,10 @@ export type AppTask = {
   type: string;
   defaultTime?: string;
   times?: string[];
-  completed: string[];
+  completed: {
+    timestamp: string;
+    date: string;
+  }[];
   createdAt: string;
   isActive: boolean;
   parsed: boolean;

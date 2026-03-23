@@ -2,22 +2,11 @@
 
 import { generateGoogleCalendarUrl } from '@/lib/googleCalendarUrl';
 import { useTheme } from '@/contexts/ThemeContext';
+import type { Task } from '@/types';
 
 export type TaskCardProps = {
-  task: {
-    id: string;
-    title: string;
-    description?: string;
-    location?: string;
-    frequency?: string;
-    type?: string;
-    times?: string[];
-    start?: string;
-    end?: string;
-    source?: string;
-    [key: string]: any;
-  };
-  onUpdate?: (task: any) => void;
+  task: Task;
+  onUpdate?: (task: Task) => void;
   onDelete?: (taskId: string) => void;
   onRemindLater?: (taskId: string) => void;
   isTimeForMedication?: boolean;

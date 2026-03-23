@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Chart as ChartJS,
+  type ChartOptions,
   CategoryScale,
   LinearScale,
   PointElement,
@@ -18,6 +19,7 @@ import { Line } from 'react-chartjs-2';
 import MedicationTracker from '@/components/MedicationTracker';
 import { useTheme } from '@/contexts/ThemeContext';
 import InteractiveStatBox from '@/components/InteractiveMoodbox';
+import type { Survey, Task, User } from '@/types';
 
 ChartJS.register(
   CategoryScale,
@@ -39,43 +41,52 @@ const MOCK_SERIES = {
   sleep: [2, 5, 1, 5, 2, 4, 1],
 };
 
-export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
-  const [surveys, setSurveys] = useState([]);
-  const [chartType, setChartType] = useState('mood');
-  const [activeTab, setActiveTab] = useState('overview');
+type DashboardProps = {
+  tasks: Task[];
+  onUpdateTask: (task: Task) => void;
+  onDeleteTask: (taskId: string) => void;
+};
+
+type ChartType = 'mood' | 'pain' | 'exercise' | 'sleep';
+
+export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }: DashboardProps) {
+  const [isMounted, setIsMounted] = useState(false);
+  const [user, setUser] = useState<Partial<User>>({});
+  const [surveys, setSurveys] = useState<Survey[]>([]);
+  const [chartType, setChartType] = useState<ChartType>('mood');
+  const [activeTab, setActiveTab] = useState<'overview' | 'medications'>('overview');
   const router = useRouter();
   const { isDark } = useTheme();
 
-  const user =
-    typeof window !== 'undefined'
-      ? JSON.parse(localStorage.getItem('user') || '{}')
-      : {};
-
   useEffect(() => {
-    const s = JSON.parse(localStorage.getItem('surveys') || '[]');
-    setSurveys(s);
+    setIsMounted(true);
+    const parsedUser = JSON.parse(localStorage.getItem('user') || '{}') as Partial<User>;
+    const parsedSurveys = JSON.parse(localStorage.getItem('surveys') || '[]');
+
+    setUser(parsedUser);
+    setSurveys(Array.isArray(parsedSurveys) ? (parsedSurveys as Survey[]) : []);
   }, []);
 
   const stats = useMemo(() => {
     const totalSurveys = surveys.length;
     const avgMood = surveys.length > 0
-      ? (surveys.reduce((sum, s) => sum + Number(s.answers.mood || 0), 0) / surveys.length).toFixed(1)
+      ? (surveys.reduce((sum, s) => sum + Number(s.answers?.mood || 0), 0) / surveys.length).toFixed(1)
       : 0;
     const avgPain = surveys.length > 0
-      ? (surveys.reduce((sum, s) => sum + Number(s.answers.pain || 0), 0) / surveys.length).toFixed(1)
+      ? (surveys.reduce((sum, s) => sum + Number(s.answers?.pain || 0), 0) / surveys.length).toFixed(1)
       : 0;
     const avgExercise = surveys.length > 0
-      ? (surveys.reduce((sum, s) => sum + Number(s.answers.exercise || 0), 0) / surveys.length).toFixed(0)
+      ? (surveys.reduce((sum, s) => sum + Number(s.answers?.exercise || 0), 0) / surveys.length).toFixed(0)
       : 0;
     const avgSleep = surveys.length > 0
-      ? (surveys.reduce((sum, s) => sum + Number(s.answers.sleep || 0), 0) / surveys.length).toFixed(1)
+      ? (surveys.reduce((sum, s) => sum + Number(s.answers?.sleep || 0), 0) / surveys.length).toFixed(1)
       : 0;
 
     return { totalSurveys, avgMood, avgPain, avgExercise, avgSleep };
   }, [surveys]);
 
   const chartData = useMemo(() => {
-    const sortedSurveys = [...surveys].sort((a, b) => new Date(a.date) - new Date(b.date));
+    const sortedSurveys = [...surveys].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     let labels = [...MOCK_LABELS];
     let data = [...(MOCK_SERIES[chartType] || MOCK_SERIES.mood)];
 
@@ -83,10 +94,10 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
       const label = new Date(survey.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
       const value = (() => {
         switch (chartType) {
-          case 'mood': return Number(survey.answers.mood || 0);
-          case 'pain': return Number(survey.answers.pain || 0);
-          case 'exercise': return Number(survey.answers.exercise || 0);
-          case 'sleep': return Number(survey.answers.sleep || 0);
+          case 'mood': return Number(survey.answers?.mood || 0);
+          case 'pain': return Number(survey.answers?.pain || 0);
+          case 'exercise': return Number(survey.answers?.exercise || 0);
+          case 'sleep': return Number(survey.answers?.sleep || 0);
           default: return 0;
         }
       })();
@@ -98,7 +109,7 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
     labels = labels.slice(-CHART_WINDOW_SIZE);
     data = data.slice(-CHART_WINDOW_SIZE);
 
-    const chartConfig = {
+    const chartConfig: Record<ChartType, { label: string; color: string; bgColor: string; max: number }> = {
       mood: {
         label: 'Mood Level',
         color: '#065f46',
@@ -148,7 +159,11 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
     };
   }, [surveys, chartType, isDark]);
 
-  const chartOptions = {
+  if (!isMounted) {
+    return null;
+  }
+
+  const chartOptions: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false,
     animation: {
@@ -206,7 +221,7 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
     }
   };
 
-  const ChartTypeButton = ({ type, label, icon, isActive }) => (
+  const ChartTypeButton = ({ type, label, icon, isActive }: { type: ChartType; label: string; icon: string; isActive: boolean }) => (
     <button
       onClick={() => setChartType(type)}
       className={`flex items-center space-x-3 rounded-full px-6 py-4 transition-all duration-300 ${isActive
@@ -222,7 +237,7 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
     </button>
   );
 
-  const TabButton = ({ tab, label, icon, isActive }) => (
+  const TabButton = ({ tab, label, icon, isActive }: { tab: 'overview' | 'medications'; label: string; icon: string; isActive: boolean }) => (
     <button
       onClick={() => setActiveTab(tab)}
       className={`flex items-center space-x-3 rounded-full px-7 py-4 font-semibold transition-all ${isActive
@@ -283,7 +298,7 @@ export default function Dashboard({ tasks = [], onUpdateTask, onDeleteTask }) {
               subtitle="Out of 5"
               icon="😊"
               type="mood"
-              additionalData={{ exercise: stats.avgExercise }}
+              additionalData={{ exercise: String(stats.avgExercise) }}
             />
 
             <InteractiveStatBox

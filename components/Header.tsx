@@ -1,18 +1,24 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useTheme } from "@/contexts/ThemeContext";
 import Logo from "@/components/Logo";
 import ThemeToggle from "@/components/ThemeToggle";
+import type { User } from "@/types";
 
 const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { isDark } = useTheme();
-  const user =
-    typeof window !== 'undefined'
-      ? JSON.parse(localStorage.getItem('user') || '{}')
-      : {};
+  const [isMounted, setIsMounted] = useState(false);
+  const [user, setUser] = useState<Partial<User>>({});
+
+  useEffect(() => {
+    setIsMounted(true);
+    const parsed = JSON.parse(localStorage.getItem("user") || "{}") as Partial<User>;
+    setUser(parsed);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -22,6 +28,10 @@ const Header = () => {
 
   // Don't show header on auth pages
   if (pathname.startsWith('/auth')) {
+    return null;
+  }
+
+  if (!isMounted) {
     return null;
   }
 

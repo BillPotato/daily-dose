@@ -4,9 +4,17 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import type { FormEvent } from 'react';
+
+type SignUpFormData = {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
 
 const SignUp = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<SignUpFormData>({
     name: '',
     email: '',
     password: '',
@@ -16,7 +24,7 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError('');

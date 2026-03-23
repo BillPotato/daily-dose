@@ -4,16 +4,33 @@
 import { useState, useMemo } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
 
+type StatType = 'surveys' | 'mood' | 'pain' | 'exercise';
+
+type AdditionalStatData = {
+  exercise?: string | number;
+  surveys?: number;
+};
+
+type InteractiveStatBoxProps = {
+  title: string;
+  value: string | number;
+  subtitle: string;
+  icon: string;
+  type: StatType;
+  additionalData?: AdditionalStatData;
+};
+
 const InteractiveStatBox = ({
   title,
   value,
   subtitle,
   icon,
-  type, // 'surveys', 'mood', 'pain', 'exercise'
+  type,
   additionalData = {}
-}) => {
+}: InteractiveStatBoxProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const { isDark } = useTheme();
+  const numericValue = Number(value);
 
   const { cardTone, pillTone, message, hoverIcon, tips } = useMemo(() => {
     const configs = {
@@ -35,15 +52,15 @@ const InteractiveStatBox = ({
           ? 'bg-[#252A27] border-white/15 shadow-[0_20px_60px_-15px_rgba(4,43,21,0.08)]'
           : 'bg-[#E6ECE3] border-stone-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)]',
         pillTone: 'bg-white text-emerald-900',
-        hoverIcon: parseFloat(value) < 2.5 ? '😔' : parseFloat(value) < 3.5 ? '😊' : '😄',
-        message: parseFloat(value) < 2.5
+        hoverIcon: numericValue < 2.5 ? '😔' : numericValue < 3.5 ? '😊' : '😄',
+        message: numericValue < 2.5
           ? `Your mood could use a boost. ${additionalData.exercise || 0}m of exercise is a good start. Try adding 5 minutes of mindfulness or connecting with friends.`
-          : parseFloat(value) < 3.5
+          : numericValue < 3.5
             ? `You're maintaining a balanced mood! ${additionalData.exercise || 0}m of daily exercise combined with your current routine is working well.`
             : `Excellent mood levels! Your positive outlook combined with ${additionalData.exercise || 0}m of daily activity shows great wellbeing habits.`,
-        tips: parseFloat(value) < 2.5
+        tips: numericValue < 2.5
           ? ['Try a 10-minute walk outside', 'Listen to uplifting music', 'Reach out to a friend']
-          : parseFloat(value) < 3.5
+          : numericValue < 3.5
             ? ['Practice daily gratitude', 'Maintain social connections', 'Keep active routine']
             : ['Share your positivity', 'Help others feel good', 'Set new wellness goals']
       },
@@ -52,15 +69,15 @@ const InteractiveStatBox = ({
           ? 'bg-[#252A27] border-white/15 shadow-[0_20px_60px_-15px_rgba(4,43,21,0.08)]'
           : 'bg-[#E8EFEA] border-stone-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)]',
         pillTone: 'bg-white text-emerald-900',
-        hoverIcon: parseFloat(value) < 3 ? '💚' : parseFloat(value) < 6 ? '💛' : '❤️',
-        message: parseFloat(value) < 3
+        hoverIcon: numericValue < 3 ? '💚' : numericValue < 6 ? '💛' : '❤️',
+        message: numericValue < 3
           ? `Excellent pain management! Your current approach is working well. Continue your healthy habits and regular monitoring.`
-          : parseFloat(value) < 6
+          : numericValue < 6
             ? `Moderate discomfort detected. Consider gentle stretching, proper hydration, and discussing patterns with your healthcare provider.`
             : `Higher pain levels noted. Please prioritize rest, consult your healthcare provider, and practice gentle pain management techniques.`,
-        tips: parseFloat(value) < 3
+        tips: numericValue < 3
           ? ['Maintain current routine', 'Stay well hydrated', 'Regular gentle movement']
-          : parseFloat(value) < 6
+          : numericValue < 6
             ? ['Apply warm compresses', 'Practice deep breathing', 'Gentle yoga stretches']
             : ['Rest when needed', 'Consult healthcare professional', 'Use pain management techniques']
       },
@@ -69,15 +86,15 @@ const InteractiveStatBox = ({
           ? 'bg-[#252A27] border-white/15 shadow-[0_20px_60px_-15px_rgba(4,43,21,0.08)]'
           : 'bg-[#F4F1EA] border-stone-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)]',
         pillTone: 'bg-white text-emerald-900',
-        hoverIcon: parseFloat(value) < 30 ? '💤' : parseFloat(value) < 60 ? '💪' : '🏆',
-        message: parseFloat(value) < 30
+        hoverIcon: numericValue < 30 ? '💤' : numericValue < 60 ? '💪' : '🏆',
+        message: numericValue < 30
           ? `Let's build some momentum! Starting with just 10-minute walks can significantly boost your energy, mood, and overall health. Every minute counts!`
-          : parseFloat(value) < 60
+          : numericValue < 60
             ? `Great progress! ${value}m daily is building strong healthy habits. You're on the right track to optimal fitness and wellbeing.`
             : `Outstanding commitment! ${value}m of daily exercise shows excellent dedication to your health. You're setting a fantastic example for long-term wellness.`,
-        tips: parseFloat(value) < 30
+        tips: numericValue < 30
           ? ['Start with 10min daily walks', 'Try desk stretches every hour', 'Set achievable weekly goals']
-          : parseFloat(value) < 60
+          : numericValue < 60
             ? ['Mix cardio with strength training', 'Try new activities like swimming', 'Track your progress weekly']
             : ['Maintain activity variety', 'Listen to your body for rest', 'Set new fitness challenges']
       }
@@ -94,7 +111,7 @@ const InteractiveStatBox = ({
     };
   }, [type, value, additionalData, isDark]);
 
-  const ProgressBar = ({ percentage, color }) => (
+  const ProgressBar = ({ percentage, color }: { percentage: number; color: string }) => (
     <div className={`mt-2 h-2 w-full rounded-full ${isDark ? 'bg-stone-700' : 'bg-stone-200'}`}>
       <div
         className={`h-2 rounded-full transition-all duration-1000 ease-out ${color}`}
@@ -124,13 +141,13 @@ const InteractiveStatBox = ({
         {/* Progress Bar for relevant metrics */}
         {type === 'mood' && (
           <ProgressBar
-            percentage={(parseFloat(value) / 5) * 100}
+            percentage={(numericValue / 5) * 100}
             color="bg-emerald-800"
           />
         )}
         {type === 'pain' && (
           <ProgressBar
-            percentage={(parseFloat(value) / 10) * 100}
+            percentage={(numericValue / 10) * 100}
             color="bg-emerald-800"
           />
         )}

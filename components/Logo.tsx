@@ -2,12 +2,22 @@
 
 import { useTheme } from "@/contexts/ThemeContext";
 
-const Logo = ({ size = 'medium' }) => {
+type LogoProps = {
+  size?: 'small' | 'medium' | 'large';
+};
+
+const logoSizeMap: Record<NonNullable<LogoProps['size']>, string> = {
+  small: 'w-10 h-10',
+  medium: 'w-12 h-12',
+  large: 'w-14 h-14',
+};
+
+const Logo = ({ size = 'medium' }: LogoProps) => {
   const { isDark } = useTheme();
 
   return (
     <div className={`flex items-center space-x-3 ${isDark ? 'text-stone-100' : 'text-emerald-950'}`}>
-      <div className="w-12 h-12 rounded-2xl overflow-hidden shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border border-stone-200 bg-white relative">
+      <div className={`${logoSizeMap[size]} rounded-2xl overflow-hidden shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border border-stone-200 bg-white relative`}>
         <img
           src="/dailydose.png"
           alt="Daily Dose Logo"

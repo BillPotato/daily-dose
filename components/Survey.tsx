@@ -4,9 +4,21 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTheme } from '@/contexts/ThemeContext'
+import type { Survey as SurveyType, SurveyAnswers } from '@/types'
+
+type SurveyQuestion = {
+  id: keyof SurveyAnswers
+  text: string
+  description: string
+  type: 'scale' | 'number'
+  min?: number
+  max?: number
+  labels?: string[]
+  placeholder?: string
+}
 
 // Add this missing defaultQuestions array
-const defaultQuestions = [
+const defaultQuestions: SurveyQuestion[] = [
   {
     id: 'mood',
     text: 'How are you feeling today?',
@@ -45,9 +57,13 @@ const defaultQuestions = [
 
 const SURVEY_WINDOW_SIZE = 7
 
-export default function Survey({ onSubmit }) {
-  const [answers, setAnswers] = useState(() => {
-    const init = {}
+type SurveyProps = {
+  onSubmit?: (payload: SurveyType) => void
+}
+
+export default function Survey({ onSubmit }: SurveyProps) {
+  const [answers, setAnswers] = useState<SurveyAnswers>(() => {
+    const init: SurveyAnswers = {}
     defaultQuestions.forEach((q) => (init[q.id] = ''))
     return init
   })
@@ -55,7 +71,7 @@ export default function Survey({ onSubmit }) {
   const router = useRouter()
   const { isDark } = useTheme()
 
-  const handleChange = (id, value) => {
+  const handleChange = (id: keyof SurveyAnswers, value: string) => {
     setAnswers((s) => ({ ...s, [id]: value }))
   }
 
@@ -72,20 +88,20 @@ export default function Survey({ onSubmit }) {
   }
 
   const submit = () => {
-    const payload = {
+    const payload: SurveyType = {
       id: Date.now(),
       date: new Date().toISOString(),
       answers
     }
     const parsed = JSON.parse(localStorage.getItem('surveys') || '[]')
     const existing = Array.isArray(parsed) ? parsed : []
-    const chronological = [...existing].sort((a, b) => new Date(a.date) - new Date(b.date))
+    const chronological = [...existing].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
     const updatedSurveys = [...chronological, payload].slice(-SURVEY_WINDOW_SIZE)
     localStorage.setItem('surveys', JSON.stringify(updatedSurveys))
     onSubmit && onSubmit(payload)
 
     setAnswers(() => {
-      const init = {}
+      const init: SurveyAnswers = {}
       defaultQuestions.forEach((q) => (init[q.id] = ''))
       return init
     })
@@ -98,7 +114,7 @@ export default function Survey({ onSubmit }) {
   const currentQuestion = defaultQuestions[currentStep]
   const progress = ((currentStep + 1) / defaultQuestions.length) * 100
 
-  const renderInput = (question) => {
+  const renderInput = (question: SurveyQuestion) => {
     switch (question.type) {
       case 'scale':
         const range = question.max - question.min + 1
