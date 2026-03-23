@@ -1,7 +1,5 @@
 # 💊 Daily Dose 🌿
 
-**A boutique health companion for mindful medication tracking and AI-powered symptom analysis.**
-
 [![Live Demo](https://img.shields.io/badge/Live_Demo-View_Project-emerald?style=for-the-badge)](https://daily-dose-weld.vercel.app)
 
 ![Dashboard Screenshot](./public/screenshot1.png)
