@@ -1,6 +1,6 @@
 # 💊 Daily Dose 🌿
 
-[![Live Demo](https://img.shields.io/badge/Live_Demo-View_Project-emerald?style=for-the-badge)](https://daily-dose-weld.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-View_Project-emerald?style=for-the-badge)](https://daily-dose-weld.vercel.app) [![CI Status](https://github.com/BillPotato/daily-dose/actions/workflows/ci.yml/badge.svg)](https://github.com/BillPotato/daily-dose/actions/workflows/ci.yml)
 
 ![Dashboard Screenshot](./public/screenshot1.png)
 
@@ -56,6 +56,36 @@ Daily Dose is a front-end web application I built to learn Google Cloud services
     npm run dev
     ```
     Open [http://localhost:3000](http://localhost:3000).
+
+## Testing
+
+### Run Unit and Integration Tests
+
+```bash
+npm run test
+```
+
+This runs the Jest-based test suites for utility logic, hooks, components, and API route behavior with mocked external services.
+
+### Run End-to-End Tests
+
+```bash
+npm run test:e2e
+```
+
+This runs Playwright tests. The Playwright config starts a production server via `npm run build && npm run start`, so test execution validates the app in a production-like runtime.
+
+Optional interactive mode:
+
+```bash
+npm run test:e2e:ui
+```
+
+### About `.env.test`
+
+The `.env.test` file provides safe, non-production environment values used during test runs. Its purpose is to prevent tests and CI from accidentally using real credentials or hitting production services while still allowing builds and route handlers to initialize successfully.
+
+When adding new environment-dependent features, add corresponding dummy values to `.env.test` (and CI workflow env) so automated tests remain isolated and reproducible.
 
 ## License
 
