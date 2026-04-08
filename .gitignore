@@ -1,11 +1,30 @@
-node_modules
-.next
-out
-coverage
-.DS_Store
+node_modules/
+
+# Next.js build output
+.next/
+out/
+
+# Test artifacts
+coverage/
+playwright-report/
+test-results/
+
+# Build/cache artifacts
+.swc/
+*.tsbuildinfo
+
+# Logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Local environment files
 .env.local
 .env*.local
-.vscode
-playwright-report
-test-results
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
